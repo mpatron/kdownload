@@ -165,3 +165,4 @@ export PATH="$M2_HOME/bin:$PATH"
 ./mvnw quarkus:add-extension -Dextensions='io.quarkiverse.kerberos:quarkus-kerberos'
 KRB5_CONFIG=/tmp/devservices-krb513579479556088609956.conf curl --negotiate -u bob@EXAMPLE.COM -v http://localhost:8080/api/users/me
 
+./mvnw verify -Dnative
