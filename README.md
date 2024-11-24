@@ -182,3 +182,4 @@ sudo sysctl -p /etc/sysctl.d/11-docker.conf
 ## Podman important faire:
 systemctl --user enable podman.socket --now
 export DOCKER_HOST=unix://$(podman info --format '{{.Host.RemoteSocket.Path}}')
+quarkus build --native -Dquarkus.native.container-build=true -Dquarkus.native.container-runtime=podman
