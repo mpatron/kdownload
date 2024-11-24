@@ -171,4 +171,14 @@ KRB5_CONFIG=/tmp/devservices-krb513579479556088609956.conf curl --negotiate -u b
 https://quarkus.io/guides/building-native-image#creating-a-container
 
 DOCKER_BUILDKIT=1 docker build -f src/main/docker/Dockerfile.multistage -t quarkus-quickstart/getting-started .
+docker buildx build -f src/main/docker/Dockerfile.multistage -t quarkus-quickstart/getting-started .
 docker run -i --rm -p 8080:8080 quarkus-quickstart/getting-started
+
+echo -e "net.bridge.bridge-nf-call-iptables = 1" | sudo tee /etc/sysctl.d/11-docker.conf
+echo -e "net.bridge.bridge-nf-call-ip6tables = 1" | sudo tee /etc/sysctl.d/11-docker.conf
+sudo modprobe br_netfilter
+sudo sysctl -p /etc/sysctl.d/11-docker.conf
+
+## Podman important faire:
+systemctl --user enable podman.socket --now
+export DOCKER_HOST=unix://$(podman info --format '{{.Host.RemoteSocket.Path}}')
