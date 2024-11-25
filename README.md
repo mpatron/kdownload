@@ -183,3 +183,10 @@ sudo sysctl -p /etc/sysctl.d/11-docker.conf
 systemctl --user enable podman.socket --now
 export DOCKER_HOST=unix://$(podman info --format '{{.Host.RemoteSocket.Path}}')
 quarkus build --native -Dquarkus.native.container-build=true -Dquarkus.native.container-runtime=podman
+
+
+KRB5_CONFIG=$(ls -latr /tmp/devservices-krb*.conf | tail -n 1 | awk '{print $9}') kinit alice@EXAMPLE.COM
+curl --negotiate -u alice@EXAMPLE.COM -i -X POST -H "Content-Type: multipart/form-data" -F "data=@mvnw.cmd" http://localhost:8080/api/upload
+
+
+KRB5_CONFIG=$(ls -latr /tmp/devservices-krb*.conf | tail -n 1 | awk '{print $9}') curl --negotiate -u bob@EXAMPLE.COM -v http://localhost:8080/api/users/me
