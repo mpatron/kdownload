@@ -188,5 +188,14 @@ quarkus build --native -Dquarkus.native.container-build=true -Dquarkus.native.co
 KRB5_CONFIG=$(ls -latr /tmp/devservices-krb*.conf | tail -n 1 | awk '{print $9}') kinit alice@EXAMPLE.COM
 curl --negotiate -u alice@EXAMPLE.COM -i -X POST -H "Content-Type: multipart/form-data" --form "data=@mvnw.cmd" http://localhost:8080/api/upload
 
+KRB5_CONFIG=$(ls -latr /tmp/devservices-krb*.conf | tail -n 1 | awk '{print $9}') kinit alice
+KRB5_CONFIG=$(ls -latr /tmp/devservices-krb*.conf | tail -n 1 | awk '{print $9}') klist
 
-KRB5_CONFIG=$(ls -latr /tmp/devservices-krb*.conf | tail -n 1 | awk '{print $9}') curl --negotiate -u bob@EXAMPLE.COM -v http://localhost:8080/api/users/me
+KRB5_CONFIG=$(ls -latr /tmp/devservices-krb*.conf | tail -n 1 | awk '{print $9}') curl --negotiate -u alice@EXAMPLE.COM -v http://localhost:8080/api/users/me
+
+KRB5_CONFIG=$(ls -latr /tmp/devservices-krb*.conf | tail -n 1 | awk '{print $9}') curl --negotiate -u alice@EXAMPLE.COM -i -X POST -H "Content-Type: multipart/form-data" --form "data=@mvnw.cmd" http://localhost:8080/api/upload
+KRB5_CONFIG=$(ls -latr /tmp/devservices-krb*.conf | tail -n 1 | awk '{print $9}') curl --negotiate --trace-time --trace-ids --trace target/log.log --user alice@EXAMPLE.COM --include --request POST --header "Content-Type: multipart/form-data" --form "data=@mvnw.cmd" http://localhost:8080/api/upload
+KRB5_CONFIG=$(ls -latr /tmp/devservices-krb*.conf | tail -n 1 | awk '{print $9}') curl --negotiate --user alice@EXAMPLE.COM --include --request POST --header "Content-Type: multipart/form-data" --form "data=@mvnw.cmd" http://localhost:8080/api/upload
+
+KRB5_CONFIG=$(ls -latr /tmp/devservices-krb*.conf | tail -n 1 | awk '{print $9}') kdestroy
+KRB5_CONFIG=$(ls -latr /tmp/devservices-krb*.conf | tail -n 1 | awk '{print $9}') klist

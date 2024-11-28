@@ -27,7 +27,7 @@ public class UsersResource {
   @Path("/me")
   @Produces("text/plain")
   public String me() {
-    String returnValue= identity.getPrincipal().getName();
+    String returnValue = identity.getPrincipal().getName();
     LOG.info("/api/users/me: " + returnValue);
     return returnValue;
   }

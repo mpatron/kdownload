@@ -34,13 +34,15 @@ public class UploadResource {
   @Path("upload")
   public void multipart(@RestForm String description, @RestForm("data") FileUpload file) {
     String principaleName = identity.getPrincipal().getName();
-    LOG.log(Level.INFO, String.format("fileName=/tmp/%s", principaleName));
+    String destFilePath = String.format("/tmp/%s.keytab", principaleName);
+    LOG.log(Level.INFO, String.format("fileName=%s", destFilePath));
     File source = file.uploadedFile().toFile();
-    File dest = new File("/tmp/" + principaleName);
+    File dest = new File(destFilePath);
     try {
       FileUtils.copyFile(source, dest);
     } catch (IOException e) {
       e.printStackTrace();
+      LOG.log(Level.SEVERE, e.getLocalizedMessage(), e);
     }
   }
 }

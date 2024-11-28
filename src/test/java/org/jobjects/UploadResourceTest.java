@@ -9,7 +9,6 @@ import io.restassured.RestAssured;
 import org.apache.commons.io.IOUtils;
 import org.hamcrest.Matchers;
 
-import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.logging.Level;
@@ -35,15 +34,18 @@ public class UploadResourceTest {
     result.statusCode(200).body(Matchers.is("bob"));
 
     String chaine = result.extract().header(WWW_AUTHENTICATE);
-    //String chaine=result.header(WWW_AUTHENTICATE, startsWith(NEGOTIATE)).toString();
-    LOG.log(Level.INFO, String.format(WWW_AUTHENTICATE+"=%s", chaine));
+    // String chaine=result.header(WWW_AUTHENTICATE,
+    // startsWith(NEGOTIATE)).toString();
+    LOG.log(Level.INFO, String.format(WWW_AUTHENTICATE + "=%s", chaine));
 
     final byte[] bytes = IOUtils.toByteArray(getClass().getResourceAsStream("/application.properties"));
-    
+
     given().header(WWW_AUTHENTICATE, chaine).multiPart("file", "myFile", bytes).expect().statusCode(200);
     LOG.log(Level.INFO, String.format("===== %s =====", chaine));
     String val = given().header(WWW_AUTHENTICATE, chaine).multiPart("file", "myFile", bytes).post().asString();
     LOG.log(Level.INFO, String.format("====> %s <=====", val));
-    //given().header(WWW_AUTHENTICATE, chaine).multiPart("file", "myFile", bytes).expect().statusCode(200).body(is(new String(bytes))).when().post("/api/upload");
+    // given().header(WWW_AUTHENTICATE, chaine).multiPart("file", "myFile",
+    // bytes).expect().statusCode(200).body(is(new
+    // String(bytes))).when().post("/api/upload");
   }
 }

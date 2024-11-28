@@ -17,7 +17,7 @@ public class SpnegoAuthenticationTestCase {
   @Test
   public void testSpnegoSuccess() throws Exception {
 
-    RestAssured.baseURI="http://localhost";
+    RestAssured.baseURI = "http://localhost";
     RestAssured.port = 8081;
     var header = RestAssured.get("/api/users/me").then().statusCode(401).extract().header(WWW_AUTHENTICATE);
     assertEquals(NEGOTIATE, header);
@@ -26,4 +26,3 @@ public class SpnegoAuthenticationTestCase {
     result.statusCode(200).body(Matchers.is("bob"));
   }
 }
-
