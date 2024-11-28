@@ -23,7 +23,7 @@ import jakarta.ws.rs.Path;
 @Path("/api")
 public class UploadResource {
 
-    private static final Logger LOG = Logger.getLogger(UploadResource.class.getName());
+  private static final Logger LOG = Logger.getLogger(UploadResource.class.getName());
 
   @Inject
   SecurityIdentity identity;
@@ -33,10 +33,10 @@ public class UploadResource {
   @POST
   @Path("upload")
   public void multipart(@RestForm String description, @RestForm("data") FileUpload file) {
-    String principaleName= identity.getPrincipal().getName();
+    String principaleName = identity.getPrincipal().getName();
     LOG.log(Level.INFO, String.format("fileName=/tmp/%s", principaleName));
     File source = file.uploadedFile().toFile();
-    File dest = new File("/tmp/"+principaleName);
+    File dest = new File("/tmp/" + principaleName);
     try {
       FileUtils.copyFile(source, dest);
     } catch (IOException e) {
