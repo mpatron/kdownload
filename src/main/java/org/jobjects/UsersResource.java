@@ -5,7 +5,7 @@ import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 
-import java.util.logging.Logger;
+import io.quarkus.logging.Log; 
 
 import io.quarkiverse.kerberos.KerberosPrincipal;
 
@@ -15,8 +15,6 @@ import io.quarkus.security.identity.SecurityIdentity;
 @Path("/api/users")
 @Authenticated
 public class UsersResource {
-
-  private static final Logger LOG = Logger.getLogger(UsersResource.class.getName());
 
   @Inject
   SecurityIdentity identity;
@@ -28,7 +26,7 @@ public class UsersResource {
   @Produces("text/plain")
   public String me() {
     String returnValue = identity.getPrincipal().getName();
-    LOG.info("/api/users/me: " + returnValue);
+    Log.info("/api/users/me: " + returnValue);
     return returnValue;
   }
 }

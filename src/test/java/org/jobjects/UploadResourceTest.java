@@ -11,13 +11,14 @@ import org.hamcrest.Matchers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Properties;
 import java.util.logging.Level;
-import java.util.logging.Logger;
+import io.quarkus.logging.Log;
 
 @QuarkusTest
 public class UploadResourceTest {
-  private static final Logger LOG = Logger.getLogger(UploadResource.class.getName());
-
   public static final String WWW_AUTHENTICATE = "WWW-Authenticate";
   public static final String NEGOTIATE = "Negotiate";
 
@@ -36,16 +37,32 @@ public class UploadResourceTest {
     String chaine = result.extract().header(WWW_AUTHENTICATE);
     // String chaine=result.header(WWW_AUTHENTICATE,
     // startsWith(NEGOTIATE)).toString();
-    LOG.log(Level.INFO, String.format(WWW_AUTHENTICATE + "=%s", chaine));
+    Log.info(String.format(WWW_AUTHENTICATE + "=%s", chaine));
 
     final byte[] bytes = IOUtils.toByteArray(getClass().getResourceAsStream("/application.properties"));
 
     given().header(WWW_AUTHENTICATE, chaine).multiPart("file", "myFile", bytes).expect().statusCode(200);
-    LOG.log(Level.INFO, String.format("===== %s =====", chaine));
+    Log.info(String.format("===== %s =====", chaine));
     String val = given().header(WWW_AUTHENTICATE, chaine).multiPart("file", "myFile", bytes).post().asString();
-    LOG.log(Level.INFO, String.format("====> %s <=====", val));
+    Log.info(String.format("====> %s <=====", val));
     // given().header(WWW_AUTHENTICATE, chaine).multiPart("file", "myFile",
     // bytes).expect().statusCode(200).body(is(new
     // String(bytes))).when().post("/api/upload");
+
+    /**
+     * Comment vérifier la conf ?????????
+     */
+    List<String> supplierNames = Arrays.asList("PATH", "QUARKUS_KERBEROS_DEBUG", "KERBEROS_CLIENT_LOGIN_CONTEXT_NAME",
+        "KERBEROS_CLIENT_DEBUG", "KERBEROS_CLIENT_KEYTAB_PATH", "KERBEROS_CLIENT_USER_PRINCIPAL_NAME",
+        "KERBEROS_CLIENT_USER_PRINCIPAL_REALM", "KERBEROS_CLIENT_SERVICE_PRINCIPAL_NAME",
+        "KERBEROS_CLIENT_USER_PRINCIPAL_PASSWORD", "KERBEROS_CLIENT_USE_SPNEGO_OID");
+    for (String string : supplierNames) {
+      Log.info(String.format("====> %s = %s", string, System.getenv(string)));
+    }
+
+    supplierNames = Arrays.asList("quarkus.kerberos.debug","quarkus.kerberos.keytab-path", "quarkus.kerberos.devservices.realm","kerberos-client.user-principal-realm");
+    for (String string : supplierNames) {
+      Log.info(String.format("====> %s = %s", string, System.getProperty(string)));
+    }
   }
 }
