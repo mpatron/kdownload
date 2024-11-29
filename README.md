@@ -199,3 +199,73 @@ KRB5_CONFIG=$(ls -latr /tmp/devservices-krb*.conf | tail -n 1 | awk '{print $9}'
 
 KRB5_CONFIG=$(ls -latr /tmp/devservices-krb*.conf | tail -n 1 | awk '{print $9}') kdestroy
 KRB5_CONFIG=$(ls -latr /tmp/devservices-krb*.conf | tail -n 1 | awk '{print $9}') klist
+
+
+export QUARKUS_KERBEROS_ENABLED=true 
+export QUARKUS_KERBEROS_DEBUG=true 
+export QUARKUS_KERBEROS_KEYTAB_PATH=/home/mickael/tmp/http.deborah.jobjects.org.keytab
+export QUARKUS_KERBEROS_SERVICE_PRINCIPAL_NAME="HTTP/deborah.jobjects.org"
+export QUARKUS_KERBEROS_SERVICE_PRINCIPAL_REALM=JOBJECTS.ORG
+
+Sur MX :
+printf "HelloWorld\x21\n" | kinit admin
+klist
+ipa dnszone-add 1.168.192.in-addr.arpa.
+# ou comme ça:
+# ipa dnszone-add --name-from-ip=192.168.1.0/24
+
+dig @idm deborah.jobjects.org +short
+dig @idm -x 192.168.1.18 +short
+
+DOMAIN=JOBJECTS.ORG
+NAMESERVER=idm
+for i in _ldap._tcp _kerberos._tcp _kerberos._udp _kerberos-master._tcp _kerberos-master._udp _ntp._udp; do echo ""; dig @${NAMESERVER} ${i}.${DOMAIN} srv +nocmd +noquestion +nocomments +nostats +noaa +noadditional +noauthority; done | egrep -v "^;" | egrep _
+
+# ipa dnsrecord-add jobjects.org deborah --a-rec 192.168.1.18 --a-create-reverse
+ipa dnsrecord-add 1.168.192.in-addr.arpa. 18 --ptr-rec=deborah.jobjects.org.
+ipa dnsrecord-add jobjects.org deborah --a-rec 192.168.1.18
+
+[root@idm ~]# dig @idm -x 192.168.1.18 +short
+deborah.jobjects.org.
+[root@idm ~]# dig @idm deborah.jobjects.org +short
+192.168.1.18
+[root@idm ~]# ipa host-add deborah.jobjects.org
+---------------------------------
+Added host "deborah.jobjects.org"
+---------------------------------
+  Host name: deborah.jobjects.org
+  Principal name: host/deborah.jobjects.org@JOBJECTS.ORG
+  Principal alias: host/deborah.jobjects.org@JOBJECTS.ORG
+  Password: False
+  Keytab: False
+  Managed by: deborah.jobjects.org
+[root@idm ~]# ipa service-add HTTP/deborah.jobjects.org
+------------------------------------------------------
+Added service "HTTP/deborah.jobjects.org@JOBJECTS.ORG"
+------------------------------------------------------
+  Principal name: HTTP/deborah.jobjects.org@JOBJECTS.ORG
+  Principal alias: HTTP/deborah.jobjects.org@JOBJECTS.ORG
+  Managed by: deborah.jobjects.org
+[root@idm ~]# ipa-getkeytab -s idm.jobjects.org idm -p HTTP/deborah.jobjects.org -k ./http.deborah.jobjects.org.keytab
+Keytab successfully retrieved and stored in: ./http.deborah.jobjects.org.keytab
+
+
+ipa-getcert request -r -f /etc/ssl/certs/smtp.crt -k /etc/ssl/certs/smtp.key -K smtp/mail.jobjects.org
+
+mickael@deborah:~$ cat /etc/hosts | grep idm
+192.168.122.100 idm.jobjects.org idm
+mickael@deborah:~/tmp$ scp root@idm.jobjects.org:/root/http.deborah.jobjects.org.keytab .
+The authenticity of host 'idm.jobjects.org (192.168.122.100)' can't be established.
+ED25519 key fingerprint is SHA256:t8/ARrLySaFGB9fZ0zJThJk7VGnTsGTpTdaT//j/g+Q.
+This host key is known by the following other names/addresses:
+    ~/.ssh/known_hosts:17: [hashed name]
+    ~/.ssh/known_hosts:20: [hashed name]
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added 'idm.jobjects.org' (ED25519) to the list of known hosts.
+(root@idm.jobjects.org) Password: 
+http.deborah.jobjects.org.keytab                                                         100%  358   549.4KB/s   00:00
+mickael@deborah:~/tmp$ cd ~/Documents/kerberos/kdownload/
+mickael@deborah:~/Documents/kerberos/kdownload$ quarkus build --native -Dquarkus.native.container-build=true -Dquarkus.native.container-runtime=podman
+...
+
+==================================

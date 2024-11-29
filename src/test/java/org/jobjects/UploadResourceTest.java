@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
 import io.restassured.RestAssured;
+import jakarta.inject.Inject;
+
 import org.apache.commons.io.IOUtils;
 import org.hamcrest.Matchers;
 
@@ -13,12 +15,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Properties;
-import java.util.logging.Level;
+
+
 import io.quarkus.logging.Log;
 
 @QuarkusTest
 public class UploadResourceTest {
+  @Inject
+  KerberosConfig config;
+
   public static final String WWW_AUTHENTICATE = "WWW-Authenticate";
   public static final String NEGOTIATE = "Negotiate";
 
@@ -35,8 +40,6 @@ public class UploadResourceTest {
     result.statusCode(200).body(Matchers.is("bob"));
 
     String chaine = result.extract().header(WWW_AUTHENTICATE);
-    // String chaine=result.header(WWW_AUTHENTICATE,
-    // startsWith(NEGOTIATE)).toString();
     Log.info(String.format(WWW_AUTHENTICATE + "=%s", chaine));
 
     final byte[] bytes = IOUtils.toByteArray(getClass().getResourceAsStream("/application.properties"));
@@ -45,11 +48,9 @@ public class UploadResourceTest {
     Log.info(String.format("===== %s =====", chaine));
     String val = given().header(WWW_AUTHENTICATE, chaine).multiPart("file", "myFile", bytes).post().asString();
     Log.info(String.format("====> %s <=====", val));
-    // given().header(WWW_AUTHENTICATE, chaine).multiPart("file", "myFile",
-    // bytes).expect().statusCode(200).body(is(new
-    // String(bytes))).when().post("/api/upload");
 
     /**
+     * ========================================================================
      * Comment vérifier la conf ?????????
      */
     List<String> supplierNames = Arrays.asList("PATH", "QUARKUS_KERBEROS_DEBUG", "KERBEROS_CLIENT_LOGIN_CONTEXT_NAME",
@@ -59,10 +60,13 @@ public class UploadResourceTest {
     for (String string : supplierNames) {
       Log.info(String.format("====> %s = %s", string, System.getenv(string)));
     }
-
     supplierNames = Arrays.asList("quarkus.kerberos.debug","quarkus.kerberos.keytab-path", "quarkus.kerberos.devservices.realm","kerberos-client.user-principal-realm");
     for (String string : supplierNames) {
       Log.info(String.format("====> %s = %s", string, System.getProperty(string)));
     }
+    Log.info(String.format("====> %s", config.realm()));
+    /**
+     * ========================================================================
+     */
   }
 }
