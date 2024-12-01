@@ -268,4 +268,25 @@ mickael@deborah:~/tmp$ cd ~/Documents/kerberos/kdownload/
 mickael@deborah:~/Documents/kerberos/kdownload$ quarkus build --native -Dquarkus.native.container-build=true -Dquarkus.native.container-runtime=podman
 ...
 
+export QUARKUS_KERBEROS_ENABLED=true
+export QUARKUS_KERBEROS_DEBUG=true
+export QUARKUS_KERBEROS_KEYTAB_PATH=/home/mickael/tmp/http.deborah.jobjects.org.keytab
+export QUARKUS_KERBEROS_SERVICE_PRINCIPAL_NAME="HTTP/deborah.jobjects.org"
+export QUARKUS_KERBEROS_SERVICE_PRINCIPAL_REALM=JOBJECTS.ORG
+-Dquarkus.kerberos.debug=true -Dquarkus.kerberos.keytab-path=/home/mickael/tmp/http.deborah.jobjects.org.keytab -Dquarkus.kerberos.service-principal-name="HTTP/deborah.jobjects.org" -Dquarkus.kerberos.service-principal-realm=JOBJECTS.ORG -Dquarkus.kerberos.enabled=true 
+/home/mickael/Documents/kerberos/kdownload/target/kdownload-1.0-SNAPSHOT-runner -Dquarkus.kerberos.debug=true -Dquarkus.kerberos.keytab-path=/home/mickael/tmp/http.deborah.jobjects.org.keytab -Dquarkus.kerberos.service-principal-name="HTTP/deborah.jobjects.org" -Dquarkus.kerberos.service-principal-realm=JOBJECTS.ORG -Dquarkus.kerberos.devservices.realm=JOBJECTS.ORG -Dquarkus.kerberos.enabled=true -D quarkus.kerberos.devservices.enabled=false
+__  ____  __  _____   ___  __ ____  ______ 
+ --/ __ \/ / / / _ | / _ \/ //_/ / / / __/ 
+ -/ /_/ / /_/ / __ |/ , _/ ,< / /_/ /\ \   
+--\___\_\____/_/ |_/_/|_/_/|_|\____/___/   
+2024-11-29 17:41:45,246 INFO  [io.quarkus] (main) kdownload 1.0-SNAPSHOT native (powered by Quarkus 3.16.4) started in 0.050s. Listening on: http://0.0.0.0:8080
+2024-11-29 17:41:45,246 INFO  [io.quarkus] (main) Profile prod activated. 
+2024-11-29 17:41:45,246 INFO  [io.quarkus] (main) Installed features: [cdi, config-yaml, kerberos, rest, rest-client, security, smallrye-context-propagation, vertx]
+
+mickael@deborah:~/Documents/kerberos/kdownload$ kinit mickael
+Password for mickael@JOBJECTS.ORG: 
+mickael@deborah:~/Documents/kerberos/kdownload$ curl --negotiate --user mickael@JOBJECTS.ORG --include --request POST --header "Content-Type: multipart/form-data" --form "data=@mvnw.cmd" http://deborah.jobjecst.org:8080/api/upload
+curl --negotiate --user mickael@JOBJECTS.ORG http://deborah.jobjecst.org:8080/api/users/me
+
+unset QUARKUS_KERBEROS_ENABLED QUARKUS_KERBEROS_DEBUG QUARKUS_KERBEROS_KEYTAB_PATH QUARKUS_KERBEROS_SERVICE_PRINCIPAL_NAME QUARKUS_KERBEROS_SERVICE_PRINCIPAL_REALM
 ==================================

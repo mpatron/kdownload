@@ -20,6 +20,7 @@ public class IdentityService {
 
     @GET
     public String getIdentity() {
+        Utils.affiche();
         return securityIdentity.getPrincipal().getName() + " " + kerberosPrincipal.getFullName() + " "
                 + kerberosPrincipal.getRealm();
     }

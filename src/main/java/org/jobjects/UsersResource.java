@@ -5,7 +5,10 @@ import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 
-import io.quarkus.logging.Log; 
+import io.quarkus.logging.Log;
+
+import java.util.Arrays;
+import java.util.List;
 
 import io.quarkiverse.kerberos.KerberosPrincipal;
 
@@ -25,6 +28,7 @@ public class UsersResource {
   @Path("/me")
   @Produces("text/plain")
   public String me() {
+    Utils.affiche();
     String returnValue = identity.getPrincipal().getName();
     Log.info("/api/users/me: " + returnValue);
     return returnValue;
