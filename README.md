@@ -290,3 +290,8 @@ curl --negotiate --user mickael@JOBJECTS.ORG http://deborah.jobjecst.org:8080/ap
 
 unset QUARKUS_KERBEROS_ENABLED QUARKUS_KERBEROS_DEBUG QUARKUS_KERBEROS_KEYTAB_PATH QUARKUS_KERBEROS_SERVICE_PRINCIPAL_NAME QUARKUS_KERBEROS_SERVICE_PRINCIPAL_REALM
 ==================================
+
+
+firewall-cmd --zone=public --add-port=8080/tcp --permanent
+firewall-cmd --complete-reload
+firewall-cmd --list-all
