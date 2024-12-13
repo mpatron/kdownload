@@ -21,6 +21,8 @@ RUN chmod 775 /work /work/application \
   && chown -R 1001:root /work
 
 EXPOSE 8080
+EXPOSE 88/tcp
+EXPOSE 88/udp
 USER 1001
 
-CMD ["./application", "-Dquarkus.http.host=0.0.0.0"]
+CMD ["./application", "-Dquarkus.http.host=0.0.0.0", "-Dquarkus.kerberos.devservices.enabled=false"]

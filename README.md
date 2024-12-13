@@ -291,7 +291,12 @@ curl --negotiate --user mickael@JOBJECTS.ORG http://deborah.jobjecst.org:8080/ap
 unset QUARKUS_KERBEROS_ENABLED QUARKUS_KERBEROS_DEBUG QUARKUS_KERBEROS_KEYTAB_PATH QUARKUS_KERBEROS_SERVICE_PRINCIPAL_NAME QUARKUS_KERBEROS_SERVICE_PRINCIPAL_REALM
 ==================================
 
+quarkus build --native -Dquarkus.container-image.build=true -Dquarkus.native.container-runtime=podman -Dquarkus.native.additional-build-args="--static","--libc=musl"
+quarkus build --native -Dquarkus.container-image.build=true -Dquarkus.native.container-runtime=podman
+podman image ls | grep kdownload
 
 firewall-cmd --zone=public --add-port=8080/tcp --permanent
 firewall-cmd --complete-reload
 firewall-cmd --list-all
+
+sudo apt install build-essential musl-tools libz-dev zlib1g-dev
