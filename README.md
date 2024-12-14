@@ -61,6 +61,7 @@ Easily start your REST Web Services
 
 [Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
 
+~~~bash
 sudo apt install krb5-user
 sudo dpkg-reconfigure krb5-config
 mvn dependency:sources
@@ -122,13 +123,14 @@ Enter host password for user 'bob@EXAMPLE.COM':
 * Connection #0 to host localhost left intact
 
 https://docs.quarkiverse.io/quarkus-kerberos/dev/index.html#_jaas_login_configuration
+~~~
 
 ~~~bash
 curl -Ls https://sh.jbang.dev | bash -s - trust add https://repo1.maven.org/maven2/io/quarkus/quarkus-cli/
 curl -Ls https://sh.jbang.dev | bash -s - app install --fresh --force quarkus@quarkusio
 ~~~
 
-
+~~~bash
 quarkus create app org.jobjects:kdownload:1.0-SNAPSHOT
 mickael@deborah:~/Documents/kerberos$ quarkus create app org.jobjects:kdownload:1.0-SNAPSHOT
 Looking for the newly published extensions in registry.quarkus.io
@@ -149,27 +151,34 @@ applying codestarts...
 -----------
 Navigate into this directory and get started: quarkus dev
 
+~~~
+
+~~~txt
 :1,$s/[ \t]*$//
-
 sed -i 's/[ \t]*$//' ./readme.md
-
+~~~
 
 MAVEN :
+
+~~~bash
 curl -L -O --output-dir ~/tmp https://dlcdn.apache.org/maven/maven-3/3.9.9/binaries/apache-maven-3.9.9-bin.tar.gz
 sudo tar xvfz ~/tmp/apache-maven-3.9.9-bin.tar.gz -C /opt
 M2_HOME='/opt/apache-maven-3.9.9'
 export PATH="$M2_HOME/bin:$PATH"
+~~~
 
-
+~~~bash
 ./mvnw quarkus:dev
 ./mvnw quarkus:add-extension -Dextensions='io.quarkiverse.kerberos:quarkus-kerberos'
 KRB5_CONFIG=/tmp/devservices-krb513579479556088609956.conf curl --negotiate -u bob@EXAMPLE.COM -v http://localhost:8080/api/users/me
 
 ./mvnw verify -Dnative
 ./mvnw package -Dnative -Dquarkus.native.container-build=true -Dquarkus.container-image.build=true
+~~~
 
 https://quarkus.io/guides/building-native-image#creating-a-container
 
+~~~
 DOCKER_BUILDKIT=1 docker build -f src/main/docker/Dockerfile.multistage -t quarkus-quickstart/getting-started .
 docker buildx build -f src/main/docker/Dockerfile.multistage -t quarkus-quickstart/getting-started .
 docker run -i --rm -p 8080:8080 quarkus-quickstart/getting-started
@@ -178,13 +187,17 @@ echo -e "net.bridge.bridge-nf-call-iptables = 1" | sudo tee /etc/sysctl.d/11-doc
 echo -e "net.bridge.bridge-nf-call-ip6tables = 1" | sudo tee /etc/sysctl.d/11-docker.conf
 sudo modprobe br_netfilter
 sudo sysctl -p /etc/sysctl.d/11-docker.conf
+~~~
 
 ## Podman important faire:
+
+~~~bash
 systemctl --user enable podman.socket --now
 export DOCKER_HOST=unix://$(podman info --format '{{.Host.RemoteSocket.Path}}')
 quarkus build --native -Dquarkus.native.container-build=true -Dquarkus.native.container-runtime=podman
+~~~
 
-
+~~~bash
 KRB5_CONFIG=$(ls -latr /tmp/devservices-krb*.conf | tail -n 1 | awk '{print $9}') kinit alice@EXAMPLE.COM
 curl --negotiate -u alice@EXAMPLE.COM -i -X POST -H "Content-Type: multipart/form-data" --form "data=@mvnw.cmd" http://localhost:8080/api/upload
 
@@ -206,8 +219,11 @@ export QUARKUS_KERBEROS_DEBUG=true
 export QUARKUS_KERBEROS_KEYTAB_PATH=/home/mickael/tmp/http.deborah.jobjects.org.keytab
 export QUARKUS_KERBEROS_SERVICE_PRINCIPAL_NAME="HTTP/deborah.jobjects.org"
 export QUARKUS_KERBEROS_SERVICE_PRINCIPAL_REALM=JOBJECTS.ORG
+~~~
 
-Sur MX :
+Ouverture de session sur le client freeipa :
+
+~~~bash
 printf "HelloWorld\x21\n" | kinit admin
 klist
 ipa dnszone-add 1.168.192.in-addr.arpa.
@@ -220,7 +236,9 @@ dig @idm -x 192.168.1.18 +short
 DOMAIN=JOBJECTS.ORG
 NAMESERVER=idm
 for i in _ldap._tcp _kerberos._tcp _kerberos._udp _kerberos-master._tcp _kerberos-master._udp _ntp._udp; do echo ""; dig @${NAMESERVER} ${i}.${DOMAIN} srv +nocmd +noquestion +nocomments +nostats +noaa +noadditional +noauthority; done | egrep -v "^;" | egrep _
+~~~
 
+~~~bash
 # ipa dnsrecord-add jobjects.org deborah --a-rec 192.168.1.18 --a-create-reverse
 ipa dnsrecord-add 1.168.192.in-addr.arpa. 18 --ptr-rec=deborah.jobjects.org.
 ipa dnsrecord-add jobjects.org deborah --a-rec 192.168.1.18
@@ -248,10 +266,11 @@ Added service "HTTP/deborah.jobjects.org@JOBJECTS.ORG"
   Managed by: deborah.jobjects.org
 [root@idm ~]# ipa-getkeytab -s idm.jobjects.org idm -p HTTP/deborah.jobjects.org -k ./http.deborah.jobjects.org.keytab
 Keytab successfully retrieved and stored in: ./http.deborah.jobjects.org.keytab
-
+~~~
 
 ipa-getcert request -r -f /etc/ssl/certs/smtp.crt -k /etc/ssl/certs/smtp.key -K smtp/mail.jobjects.org
 
+~~~bash
 mickael@deborah:~$ cat /etc/hosts | grep idm
 192.168.122.100 idm.jobjects.org idm
 mickael@deborah:~/tmp$ scp root@idm.jobjects.org:/root/http.deborah.jobjects.org.keytab .
@@ -287,10 +306,14 @@ mickael@deborah:~/Documents/kerberos/kdownload$ kinit mickael
 Password for mickael@JOBJECTS.ORG: 
 mickael@deborah:~/Documents/kerberos/kdownload$ curl --negotiate --user mickael@JOBJECTS.ORG --include --request POST --header "Content-Type: multipart/form-data" --form "data=@mvnw.cmd" http://deborah.jobjecst.org:8080/api/upload
 curl --negotiate --user mickael@JOBJECTS.ORG http://deborah.jobjecst.org:8080/api/users/me
+~~~bash
 
+~~~bash
 unset QUARKUS_KERBEROS_ENABLED QUARKUS_KERBEROS_DEBUG QUARKUS_KERBEROS_KEYTAB_PATH QUARKUS_KERBEROS_SERVICE_PRINCIPAL_NAME QUARKUS_KERBEROS_SERVICE_PRINCIPAL_REALM
 ==================================
+~~~
 
+~~~bash
 quarkus build --native -Dquarkus.container-image.build=true -Dquarkus.native.container-runtime=podman -Dquarkus.native.additional-build-args="--static","--libc=musl"
 quarkus build --native -Dquarkus.container-image.build=true -Dquarkus.native.container-runtime=podman
 podman image ls | grep kdownload
@@ -300,3 +323,4 @@ firewall-cmd --complete-reload
 firewall-cmd --list-all
 
 sudo apt install build-essential musl-tools libz-dev zlib1g-dev
+~~~
