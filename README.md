@@ -323,4 +323,6 @@ firewall-cmd --complete-reload
 firewall-cmd --list-all
 
 sudo apt install build-essential musl-tools libz-dev zlib1g-dev
+
+quarkus build --native -Dquarkus.container-image.build=true --no-tests
 ~~~
