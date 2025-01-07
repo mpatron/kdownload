@@ -329,7 +329,7 @@ quarkus build --native -Dquarkus.container-image.build=true --no-tests
 
 ~~~bash
 # build
-podman build --tag mpatron/kdownload:1.0.0 --file ./podman/Dockerfile
+podman build --tag mpatron/kdownload:1.0.0 --file ./Dockerfile
 # lancement
 podman run --rm --detach --replace --cap-add=NET_RAW --name kdownload  --volume /home/mickael/tmp:/work/keytabs --volume ./podman/krb5.conf:/etc/krb5.conf --publish 8080:8080 --env KEYTAB_FILE=/work/keytabs/http.deborah.jobjects.org.keytab mpatron/kdownload:1.0.0
 # show log
