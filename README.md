@@ -328,8 +328,13 @@ quarkus build --native -Dquarkus.container-image.build=true --no-tests
 ~~~
 
 ~~~bash
+# build
 podman build --tag mpatron/kdownload:1.0.0 --file ./Dockerfile
-podman run --rm --detach --name kdownload mpatron/kdownload:1.0.0
+# lancement
+podman run --rm --detach --replace --name kdownload  --volume /home/mickael/tmp:/work/keytabs --env KEYTAB_FILE=/work/keytabs/http.deborah.jobjects.org.keytab mpatron/kdownload:1.0.0
+# show log
 podman logs kdownload
-
+# debug
+podman exec -it kdownload /bin/bash
 ~~~
+curl --negotiate --user mickael@JOBJECTS.ORG http://deborah.jobjecst.org:8080/api/users/me
