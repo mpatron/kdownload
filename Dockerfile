@@ -1,9 +1,9 @@
 FROM registry.access.redhat.com/ubi8/ubi-minimal:8.10
 
 RUN microdnf --nodocs install yum
-RUN yum --nodocs -q update -y \
-    && yum --nodocs -q install -y install krb5-workstation \
-    && yum clean all
+RUN yum --nodocs -q update -y
+RUN yum --nodocs -q install -y install krb5-workstation
+RUN yum clean all
 
 WORKDIR /work/
 
