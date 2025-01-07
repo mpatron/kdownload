@@ -8,9 +8,9 @@ If you want to learn more about Quarkus, please visit its website: <https://quar
 
 You can run your application in dev mode that enables live coding using:
 
-```shell script
+~~~shell script
 ./mvnw compile quarkus:dev
-```
+~~~
 
 > **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at <http://localhost:8080/q/dev/>.
 
@@ -18,9 +18,9 @@ You can run your application in dev mode that enables live coding using:
 
 The application can be packaged using:
 
-```shell script
+~~~shell script
 ./mvnw package
-```
+~~~
 
 It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
 Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
@@ -29,9 +29,9 @@ The application is now runnable using `java -jar target/quarkus-app/quarkus-run.
 
 If you want to build an _über-jar_, execute the following command:
 
-```shell script
+~~~shell script
 ./mvnw package -Dquarkus.package.jar.type=uber-jar
-```
+~~~
 
 The application, packaged as an _über-jar_, is now runnable using `java -jar target/*-runner.jar`.
 
@@ -39,15 +39,15 @@ The application, packaged as an _über-jar_, is now runnable using `java -jar ta
 
 You can create a native executable using:
 
-```shell script
+~~~shell script
 ./mvnw package -Dnative
-```
+~~~
 
 Or, if you don't have GraalVM installed, you can run the native executable build in a container using:
 
-```shell script
+~~~shell script
 ./mvnw package -Dnative -Dquarkus.native.container-build=true
-```
+~~~
 
 You can then execute your native executable with: `./target/kdownload-1.0-SNAPSHOT-runner`
 
@@ -96,9 +96,9 @@ Default principal: bob@EXAMPLE.COM
 
 Valid starting       Expires              Service principal
 22/11/2024 17:44:51  23/11/2024 05:44:51  krbtgt/EXAMPLE.COM@EXAMPLE.COM
-	renew until 29/11/2024 17:44:48
+  renew until 29/11/2024 17:44:48
 22/11/2024 17:44:58  23/11/2024 05:44:51  HTTP/localhost@EXAMPLE.COM
-	renew until 29/11/2024 17:44:48
+  renew until 29/11/2024 17:44:48
 mickael@deborah:~/Documents/kerberos/kdownload$ KRB5_CONFIG=/tmp/devservices-krb513579479556088609956.conf curl --negotiate -u bob@EXAMPLE.COM -v http://localhost:8080/api/users/me
 Enter host password for user 'bob@EXAMPLE.COM':
 * Host localhost:8080 was resolved.
@@ -121,9 +121,9 @@ Enter host password for user 'bob@EXAMPLE.COM':
 < Content-Type: text/plain;charset=UTF-8
 < 
 * Connection #0 to host localhost left intact
-
-https://docs.quarkiverse.io/quarkus-kerberos/dev/index.html#_jaas_login_configuration
 ~~~
+
+[https://docs.quarkiverse.io/quarkus-kerberos/dev/index.html#_jaas_login_configuration](https://docs.quarkiverse.io/quarkus-kerberos/dev/index.html#_jaas_login_configuration)
 
 ~~~bash
 curl -Ls https://sh.jbang.dev | bash -s - trust add https://repo1.maven.org/maven2/io/quarkus/quarkus-cli/
@@ -176,9 +176,9 @@ KRB5_CONFIG=/tmp/devservices-krb513579479556088609956.conf curl --negotiate -u b
 ./mvnw package -Dnative -Dquarkus.native.container-build=true -Dquarkus.container-image.build=true
 ~~~
 
-https://quarkus.io/guides/building-native-image#creating-a-container
+[https://quarkus.io/guides/building-native-image#creating-a-container](https://quarkus.io/guides/building-native-image#creating-a-container)
 
-~~~
+~~~bash
 DOCKER_BUILDKIT=1 docker build -f src/main/docker/Dockerfile.multistage -t quarkus-quickstart/getting-started .
 docker buildx build -f src/main/docker/Dockerfile.multistage -t quarkus-quickstart/getting-started .
 docker run -i --rm -p 8080:8080 quarkus-quickstart/getting-started
@@ -189,7 +189,7 @@ sudo modprobe br_netfilter
 sudo sysctl -p /etc/sysctl.d/11-docker.conf
 ~~~
 
-## Podman important faire:
+## Podman important faire
 
 ~~~bash
 systemctl --user enable podman.socket --now
@@ -325,4 +325,11 @@ firewall-cmd --list-all
 sudo apt install build-essential musl-tools libz-dev zlib1g-dev
 
 quarkus build --native -Dquarkus.container-image.build=true --no-tests
+~~~
+
+~~~bash
+podman build --tag mpatron/kdownload:1.0.0 --file ./Dockerfile
+podman run --rm --detach --name kdownload mpatron/kdownload:1.0.0
+podman logs kdownload
+
 ~~~
