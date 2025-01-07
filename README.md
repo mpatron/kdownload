@@ -329,12 +329,19 @@ quarkus build --native -Dquarkus.container-image.build=true --no-tests
 
 ~~~bash
 # build
-podman build --tag mpatron/kdownload:1.0.0 --file ./Dockerfile
+podman build --tag mpatron/kdownload:1.0.0 --file ./podman/Dockerfile
 # lancement
-podman run --rm --detach --replace --name kdownload  --volume /home/mickael/tmp:/work/keytabs --publish 8080:8080 --env KEYTAB_FILE=/work/keytabs/http.deborah.jobjects.org.keytab mpatron/kdownload:1.0.0
+podman run --rm --detach --replace --cap-add=NET_RAW --name kdownload  --volume /home/mickael/tmp:/work/keytabs --volume ./podman/krb5.conf:/etc/krb5.conf --publish 8080:8080 --env KEYTAB_FILE=/work/keytabs/http.deborah.jobjects.org.keytab mpatron/kdownload:1.0.0
 # show log
 podman logs kdownload
 # debug
 podman exec -it kdownload /bin/bash
 ~~~
-curl --negotiate --user mickael@JOBJECTS.ORG http://deborah.jobjecst.org:8080/api/users/me
+
+~~~bash
+kinit mickael@JOBJECTS.ORG
+curl --verbose --negotiate http://deborah.jobjects.org:8080/api/users/me
+# Quand on envoie un fichier (ici 'mvnw.cmd'), il sera mis dans /tmp/$USER.keytab du containener
+curl --verbose --negotiate --include --request POST --header "Content-Type: multipart/form-data" --form "data=@mvnw.cmd" http://localhost:8080/api/upload
+curl --verbose --negotiate --include --request POST --header "Content-Type: multipart/form-data" --form "data=@$(klist | grep FILE | cut -d : -f 3)" http://deborah.jobjects.org:8080/api/upload
+~~~

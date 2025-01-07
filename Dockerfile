@@ -3,7 +3,7 @@ FROM ubuntu
 
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get -qq update && \
-    apt-get -yqq install krb5-user libpam-krb5 curl && \
+    apt-get -yqq install krb5-user libpam-krb5 curl iputils-ping && \
     apt-get -yqq clean
 
 WORKDIR /work/
@@ -16,7 +16,7 @@ WORKDIR /work/
 
 RUN chmod "g+rwX" /work
 COPY --chmod=774 target/*-runner /work/application
-COPY --chmod=774 docker_entrypoint_start-quarkus.sh /work/docker_entrypoint_start-quarkus.sh
+COPY --chmod=774 podman/docker_entrypoint_start-quarkus.sh /work/docker_entrypoint_start-quarkus.sh
 
 RUN mkdir -p /work/keytabs
 
