@@ -21,3 +21,4 @@ EXPOSE 88/udp
 USER 1001
 
 ENTRYPOINT ["/work/docker_entrypoint_start-quarkus.sh"]
+CMD [""]

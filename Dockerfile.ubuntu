@@ -17,3 +17,4 @@ EXPOSE 88/tcp
 EXPOSE 88/udp
 
 ENTRYPOINT ["/work/docker_entrypoint_start-quarkus.sh"]
+CMD [""]

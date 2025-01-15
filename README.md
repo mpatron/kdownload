@@ -333,6 +333,8 @@ podman build --tag mpatron/kdownload:1.0.0 --file ./Dockerfile
 podman save localhost/mpatron/kdownload:1.0.0 -o /mnt/c/Temp/kdownload.tar.gz
 # lancement
 podman run --rm --detach --replace --cap-add=NET_RAW --name kdownload  --volume /home/mickael/tmp:/work/keytabs --volume ./podman/krb5.conf:/etc/krb5.conf --publish 8080:8080 --env KEYTAB_FILE=/work/keytabs/http.deborah.jobjects.org.keytab mpatron/kdownload:1.0.0
+# Eteindre
+podman stop kdownload 
 # show log
 podman logs kdownload
 # debug
