@@ -8,10 +8,6 @@ LABEL org.opencontainers.image.authors="Mickael Patron"
 LABEL org.opencontainers.image.licenses="MIT"
 LABEL org.opencontainers.image.documentation="https://github.com/mpatron/kdownload/README.md"
 
-# RUN microdnf --nodocs install yum \
-#   && yum --nodocs -q update -y \
-#   && yum --nodocs -q install -y krb5-workstation \
-#   && yum clean all
 RUN microdnf install --nodocs --assumeyes --best shadow-utils krb5-workstation && microdnf clean all
 
 # The UID env var should be used in child Containerfile.
@@ -22,7 +18,6 @@ ENV HOME=/home/${USERNAME}
 
 # This is to mimic the OpenShift behaviour of adding the dynamic user to group 0.
 RUN adduser --comment "Default user" --system --uid ${UID} --gid ${GID} --home-dir ${HOME} --create-home ${USERNAME}
-# RUN useradd --comment "Default user" --disabled-password --uid ${UID} --gid ${GID} --home-dir ${HOME} --create-home ${USERNAME}
 
 WORKDIR /work/
 
@@ -37,13 +32,5 @@ EXPOSE 8080
 EXPOSE 88/tcp
 EXPOSE 88/udp
 USER ${USERNAME}
-
-# Add Tini : https://github.com/krallin/tini/tree/v0.19.0
-# ENV TINI_VERSION v0.19.0
-# ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
-# RUN chmod 555 /tini
-# USER ${USERNAME}
-# ENTRYPOINT ["/tini", "--"]
-# CMD ["/work/docker_entrypoint_start-quarkus.sh"]
 
 ENTRYPOINT ["/work/docker_entrypoint_start-quarkus.sh"]
