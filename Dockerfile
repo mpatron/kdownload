@@ -33,4 +33,4 @@ EXPOSE 88/tcp
 EXPOSE 88/udp
 USER ${USERNAME}
 
-ENTRYPOINT ["/work/docker_entrypoint_start-quarkus.sh"]
+CMD ["/bin/bash", "-c", "/work/docker_entrypoint_start-quarkus.sh"]
