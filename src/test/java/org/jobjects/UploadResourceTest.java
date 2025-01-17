@@ -30,12 +30,10 @@ public class UploadResourceTest {
   @Test
   void testMultipart() throws Exception {
 
-    KerberosTestClient kerberosTestClient = new KerberosTestClient();
-    RestAssured.baseURI = "http://localhost";
-    RestAssured.port = 8081;
-    var header = RestAssured.get("/api/users/me").then().statusCode(401).extract().header(WWW_AUTHENTICATE);
-    assertEquals(NEGOTIATE, header);
 
+    given().when().get("/api/users/me").then().assertThat().statusCode(401).and().header(WWW_AUTHENTICATE, NEGOTIATE);
+
+    KerberosTestClient kerberosTestClient = new KerberosTestClient();
     var result = kerberosTestClient.get("/api/users/me", "bob", "bob");
     result.statusCode(200).body(Matchers.is("bob"));
 

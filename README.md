@@ -325,11 +325,13 @@ firewall-cmd --list-all
 sudo apt install build-essential musl-tools libz-dev zlib1g-dev
 
 quarkus build --native -Dquarkus.container-image.build=true --no-tests
+quarkus build --native -Dquarkus.container-image.build=true -Dquarkus.native.container-runtime=podman --no-tests
 ~~~
 
 ~~~bash
 VERSION=1.0.3
 # build
+quarkus build --native -Dquarkus.container-image.build=true -Dquarkus.native.container-runtime=podman --no-tests
 podman build --tag mpatron/kdownload:${VERSION} --file ./Dockerfile
 podman save localhost/mpatron/kdownload:${VERSION} -o /mnt/c/Temp/kdownload.tar.gz
 # lancement

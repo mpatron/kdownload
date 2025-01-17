@@ -1,13 +1,14 @@
 package org.jobjects;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static io.restassured.RestAssured.given;
 
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 
 import io.quarkiverse.kerberos.test.utils.KerberosTestClient;
-import io.restassured.RestAssured;
+import io.quarkus.test.junit.QuarkusTest;
 
+@QuarkusTest
 public class SpnegoAuthenticationTestCase {
   public static final String WWW_AUTHENTICATE = "WWW-Authenticate";
   public static final String NEGOTIATE = "Negotiate";
@@ -16,11 +17,7 @@ public class SpnegoAuthenticationTestCase {
 
   @Test
   public void testSpnegoSuccess() throws Exception {
-
-    RestAssured.baseURI = "http://localhost";
-    RestAssured.port = 8081;
-    var header = RestAssured.get("/api/users/me").then().statusCode(401).extract().header(WWW_AUTHENTICATE);
-    assertEquals(NEGOTIATE, header);
+    given().when().get("/api/users/me").then().assertThat().statusCode(401).and().header(WWW_AUTHENTICATE, NEGOTIATE);
 
     var result = kerberosTestClient.get("/api/users/me", "bob", "bob");
     result.statusCode(200).body(Matchers.is("bob"));
