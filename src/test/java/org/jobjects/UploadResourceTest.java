@@ -1,35 +1,33 @@
 package org.jobjects;
 
-import io.quarkiverse.kerberos.test.utils.KerberosTestClient;
-import io.quarkus.test.junit.QuarkusTest;
-import org.junit.jupiter.api.Test;
-
 import static io.restassured.RestAssured.given;
-import io.restassured.RestAssured;
-import jakarta.inject.Inject;
-
-import org.apache.commons.io.IOUtils;
-import org.hamcrest.Matchers;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.io.IOUtils;
+import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Test;
 
+import io.quarkiverse.kerberos.test.utils.KerberosTestClient;
 import io.quarkus.logging.Log;
+import io.quarkus.test.junit.QuarkusTest;
+import jakarta.inject.Inject;
 
 @QuarkusTest
 public class UploadResourceTest {
+
   @Inject
   KerberosConfig config;
+
+  @Inject
+  KerberosClientConfig configClient;
 
   public static final String WWW_AUTHENTICATE = "WWW-Authenticate";
   public static final String NEGOTIATE = "Negotiate";
 
   @Test
   void testMultipart() throws Exception {
-
 
     given().when().get("/api/users/me").then().assertThat().statusCode(401).and().header(WWW_AUTHENTICATE, NEGOTIATE);
 
@@ -56,13 +54,19 @@ public class UploadResourceTest {
         "KERBEROS_CLIENT_USER_PRINCIPAL_REALM", "KERBEROS_CLIENT_SERVICE_PRINCIPAL_NAME",
         "KERBEROS_CLIENT_USER_PRINCIPAL_PASSWORD", "KERBEROS_CLIENT_USE_SPNEGO_OID");
     for (String string : supplierNames) {
-      Log.info(String.format("====> %s = %s", string, System.getenv(string)));
+      Log.info(String.format("ENV ====> %s = %s", string, System.getenv(string)));
     }
-    supplierNames = Arrays.asList("quarkus.kerberos.debug","quarkus.kerberos.keytab-path", "quarkus.kerberos.devservices.realm","kerberos-client.user-principal-realm");
-    for (String string : supplierNames) {
-      Log.info(String.format("====> %s = %s", string, System.getProperty(string)));
+
+    
+    for (String string : config.kerberos().keySet()) {
+      Log.info(String.format("KERBEROS ====> %s = %s", string, config.kerberos().get(string)));
     }
-    Log.info(String.format("====> %s", config.realm()));
+    
+    Log.info(String.format("KERBEROS CLIENT====> %s = %s", "user-principal-name", configClient.userPrincipalName()));
+    Log.info(String.format("KERBEROS CLIENT====> %s = %s", "user-principal-password", configClient.userPrincipalPassword()));
+    Log.info(String.format("KERBEROS CLIENT====> %s = %s", "user-principal-realm", configClient.userPrincipalRealm()));
+    Log.info(String.format("KERBEROS CLIENT====> %s = %s", "service-principal-name", configClient.servicePrincipalName()));
+
     /**
      * ========================================================================
      */

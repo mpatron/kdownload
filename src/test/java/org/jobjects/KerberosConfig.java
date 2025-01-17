@@ -1,10 +1,12 @@
 package org.jobjects;
 
-import io.smallrye.config.ConfigMapping;
-import io.smallrye.config.WithDefault;
+import java.util.Map;
 
-@ConfigMapping(prefix = "quarkus.kerberos.devservices")
+import io.smallrye.config.ConfigMapping;
+import io.smallrye.config.WithName;
+
+@ConfigMapping(prefix = "quarkus")
 public interface KerberosConfig {
-	@WithDefault("toto")
-	public String realm();
+	@WithName("kerberos")
+	public Map<String, String>  kerberos();
 }
