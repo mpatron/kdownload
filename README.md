@@ -12,7 +12,7 @@ You can run your application in dev mode that enables live coding using:
 ./mvnw compile quarkus:dev
 ~~~
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at <http://localhost:8080/q/dev/>.
+> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at <http://localhost:8088/q/dev/>.
 
 ## Packaging and running the application
 
@@ -66,19 +66,19 @@ sudo apt install krb5-user
 sudo dpkg-reconfigure krb5-config
 mvn dependency:sources
 
-mickael@deborah:~/Documents/kerberos/kdownload$ KRB5_CONFIG=/tmp/devservices-krb513579479556088609956.conf curl --negotiate -u bob@EXAMPLE.COM -v http://localhost:8080/api/users/me
-Enter host password for user 'bob@EXAMPLE.COM':
-* Host localhost:8080 was resolved.
+mickael@deborah:~/Documents/kerberos/kdownload$ KRB5_CONFIG=/tmp/devservices-krb513579479556088609956.conf curl --negotiate -u bob@JOBJECTS.ORG -v http://localhost:8088/api/users/me
+Enter host password for user 'bob@JOBJECTS.ORG':
+* Host localhost:8088 was resolved.
 * IPv6: ::1
 * IPv4: 127.0.0.1
-*   Trying [::1]:8080...
-* connect to ::1 port 8080 from ::1 port 52894 failed: Connexion refusée
-*   Trying 127.0.0.1:8080...
-* Connected to localhost (127.0.0.1) port 8080
+*   Trying [::1]:8088...
+* connect to ::1 port 8088 from ::1 port 52894 failed: Connexion refusée
+*   Trying 127.0.0.1:8088...
+* Connected to localhost (127.0.0.1) port 8088
 * gss_init_sec_context() failed: No credentials were supplied, or the credentials were unavailable or inaccessible. SPNEGO cannot find mechanisms to negotiate. 
-* Server auth using Negotiate with user 'bob@EXAMPLE.COM'
+* Server auth using Negotiate with user 'bob@JOBJECTS.ORG'
 > GET /api/users/me HTTP/1.1
-> Host: localhost:8080
+> Host: localhost:8088
 > User-Agent: curl/8.5.0
 > Accept: */*
 > 
@@ -88,29 +88,29 @@ Enter host password for user 'bob@EXAMPLE.COM':
 < content-length: 0
 < 
 * Connection #0 to host localhost left intact
-mickael@deborah:~/Documents/kerberos/kdownload$ KRB5_CONFIG=/tmp/devservices-krb513579479556088609956.conf kinit bob@EXAMPLE.COM
-Password for bob@EXAMPLE.COM: 
+mickael@deborah:~/Documents/kerberos/kdownload$ KRB5_CONFIG=/tmp/devservices-krb513579479556088609956.conf kinit bob@JOBJECTS.ORG
+Password for bob@JOBJECTS.ORG: 
 mickael@deborah:~/Documents/kerberos/kdownload$ KRB5_CONFIG=/tmp/devservices-krb513579479556088609956.conf klist
 Ticket cache: FILE:/tmp/krb5cc_1000
-Default principal: bob@EXAMPLE.COM
+Default principal: bob@JOBJECTS.ORG
 
 Valid starting       Expires              Service principal
-22/11/2024 17:44:51  23/11/2024 05:44:51  krbtgt/EXAMPLE.COM@EXAMPLE.COM
+22/11/2024 17:44:51  23/11/2024 05:44:51  krbtgt/JOBJECTS.ORG@JOBJECTS.ORG
   renew until 29/11/2024 17:44:48
-22/11/2024 17:44:58  23/11/2024 05:44:51  HTTP/localhost@EXAMPLE.COM
+22/11/2024 17:44:58  23/11/2024 05:44:51  HTTP/localhost@JOBJECTS.ORG
   renew until 29/11/2024 17:44:48
-mickael@deborah:~/Documents/kerberos/kdownload$ KRB5_CONFIG=/tmp/devservices-krb513579479556088609956.conf curl --negotiate -u bob@EXAMPLE.COM -v http://localhost:8080/api/users/me
-Enter host password for user 'bob@EXAMPLE.COM':
-* Host localhost:8080 was resolved.
+mickael@deborah:~/Documents/kerberos/kdownload$ KRB5_CONFIG=/tmp/devservices-krb513579479556088609956.conf curl --negotiate -u bob@JOBJECTS.ORG -v http://localhost:8088/api/users/me
+Enter host password for user 'bob@JOBJECTS.ORG':
+* Host localhost:8088 was resolved.
 * IPv6: ::1
 * IPv4: 127.0.0.1
-*   Trying [::1]:8080...
-* connect to ::1 port 8080 from ::1 port 56168 failed: Connexion refusée
-*   Trying 127.0.0.1:8080...
-* Connected to localhost (127.0.0.1) port 8080
-* Server auth using Negotiate with user 'bob@EXAMPLE.COM'
+*   Trying [::1]:8088...
+* connect to ::1 port 8088 from ::1 port 56168 failed: Connexion refusée
+*   Trying 127.0.0.1:8088...
+* Connected to localhost (127.0.0.1) port 8088
+* Server auth using Negotiate with user 'bob@JOBJECTS.ORG'
 > GET /api/users/me HTTP/1.1
-> Host: localhost:8080
+> Host: localhost:8088
 > Authorization: Negotiate YIIDHAYGKwYBBQUCoIIDEDCCAwygDTALBgkqhkiG9xIBAgKiggL5BIIC9WCCAvEGCSqGSIb3EgECAgEAboIC4DCCAtygAwIBBaEDAgEOogcDBQAgAAAAo4IB9mGCAfIwggHuoAMCAQWhDRsLRVhBTVBMRS5DT02iHDAaoAMCAQOhEzARGwRIVFRQGwlsb2NhbGhvc3SjggG4MIIBtKADAgESoQMCAQGiggGmBIIBoqqTSyZHuqYw4SgJRsDdq4r3WyiMNZABBtHsBYN8qSad1ctUjxJ1c2uuYk4wgg5DI2/VsraGC8Df/Jr7BY3L07zO8JSLZt4PKvlbgkvIbaa2E4c9XUXanIO+HeQzcF7t7C6KARmX5j4DIHML0s5tc0liw1Veo30+DK8IBqj2Ldhe51t9ywpINsUREMd4Me/WHCfWVSKuXlwHYtpczR+7dsqEisiffEoYjTw7ditR8SN3COUwZdwomkTxcWwppBeLFOneQpiEt9sBanhwXj7O7GCUXXyySnCJW/Mq1nXs/iqIACKSBi69pA2tvkD8oH42OhVjzmm57rPjFvZyX1cNYn3qhxGfD+rodurvEYskrwylVdQeN8gcKqNnl4+MkPYSjW4KCEUeqV+oWzc0p7pW+vs7W0eOteZ5EQG9xUr2v/swXPUKWcB0YJTQuk3nNTKw3/eyQHze932WxklpMiCKq7RcffBDts96IyP9saDy25a0vQOQTVx6Fjp2J1xU969l6Sq5CivrFZ7dptKEXKN9z4GyqV4pIa6idFMlipWm5iimvF6kgcwwgcmgAwIBEqKBwQSBvtmbmOBu2r70pDjXJW4dQ0IvqCkLE2o3yiZby5XTNvnEkx/N9R7wDYC+DXB0u49zjambJ8h9EvZbGipNBN//5FANx/nuGWsYlS29m6dREpii3tmaiY7QM4m+cCZAHXstLmv7XKyLkcrFlCmWx2mAkbVVWX+FZiDsVGjS7QL4hnkTRPaMCbd/TKJ+u+srebPsbd+wfoAeXXWp500TJb801Rl1Dy5QmEhCo0n/Dt5WI0lNj6t76jtcs1YaXBxdgAs=
 > User-Agent: curl/8.5.0
 > Accept: */*
@@ -170,7 +170,7 @@ export PATH="$M2_HOME/bin:$PATH"
 ~~~bash
 ./mvnw quarkus:dev
 ./mvnw quarkus:add-extension -Dextensions='io.quarkiverse.kerberos:quarkus-kerberos'
-KRB5_CONFIG=/tmp/devservices-krb513579479556088609956.conf curl --negotiate -u bob@EXAMPLE.COM -v http://localhost:8080/api/users/me
+KRB5_CONFIG=/tmp/devservices-krb513579479556088609956.conf curl --negotiate -u bob@JOBJECTS.ORG -v http://localhost:8088/api/users/me
 
 ./mvnw verify -Dnative
 ./mvnw package -Dnative -Dquarkus.native.container-build=true -Dquarkus.container-image.build=true
@@ -181,7 +181,7 @@ KRB5_CONFIG=/tmp/devservices-krb513579479556088609956.conf curl --negotiate -u b
 ~~~bash
 DOCKER_BUILDKIT=1 docker build -f src/main/docker/Dockerfile.multistage -t quarkus-quickstart/getting-started .
 docker buildx build -f src/main/docker/Dockerfile.multistage -t quarkus-quickstart/getting-started .
-docker run -i --rm -p 8080:8080 quarkus-quickstart/getting-started
+docker run -i --rm -p 8088:8088 quarkus-quickstart/getting-started
 
 echo -e "net.bridge.bridge-nf-call-iptables = 1" | sudo tee /etc/sysctl.d/11-docker.conf
 echo -e "net.bridge.bridge-nf-call-ip6tables = 1" | sudo tee /etc/sysctl.d/11-docker.conf
@@ -198,17 +198,17 @@ quarkus build --native -Dquarkus.native.container-build=true -Dquarkus.native.co
 ~~~
 
 ~~~bash
-KRB5_CONFIG=$(ls -latr /tmp/devservices-krb*.conf | tail -n 1 | awk '{print $9}') kinit alice@EXAMPLE.COM
-curl --negotiate -u alice@EXAMPLE.COM -i -X POST -H "Content-Type: multipart/form-data" --form "data=@mvnw.cmd" http://localhost:8080/api/upload
+KRB5_CONFIG=$(ls -latr /tmp/devservices-krb*.conf | tail -n 1 | awk '{print $9}') kinit alice@JOBJECTS.ORG
+curl --negotiate -u alice@JOBJECTS.ORG -i -X POST -H "Content-Type: multipart/form-data" --form "data=@mvnw.cmd" http://localhost:8088/api/upload
 
 KRB5_CONFIG=$(ls -latr /tmp/devservices-krb*.conf | tail -n 1 | awk '{print $9}') kinit alice
 KRB5_CONFIG=$(ls -latr /tmp/devservices-krb*.conf | tail -n 1 | awk '{print $9}') klist
 
-KRB5_CONFIG=$(ls -latr /tmp/devservices-krb*.conf | tail -n 1 | awk '{print $9}') curl --negotiate -u alice@EXAMPLE.COM -v http://localhost:8080/api/users/me
+KRB5_CONFIG=$(ls -latr /tmp/devservices-krb*.conf | tail -n 1 | awk '{print $9}') curl --negotiate -u alice@JOBJECTS.ORG -v http://localhost:8088/api/users/me
 
-KRB5_CONFIG=$(ls -latr /tmp/devservices-krb*.conf | tail -n 1 | awk '{print $9}') curl --negotiate -u alice@EXAMPLE.COM -i -X POST -H "Content-Type: multipart/form-data" --form "data=@mvnw.cmd" http://localhost:8080/api/upload
-KRB5_CONFIG=$(ls -latr /tmp/devservices-krb*.conf | tail -n 1 | awk '{print $9}') curl --negotiate --trace-time --trace-ids --trace target/log.log --user alice@EXAMPLE.COM --include --request POST --header "Content-Type: multipart/form-data" --form "data=@mvnw.cmd" http://localhost:8080/api/upload
-KRB5_CONFIG=$(ls -latr /tmp/devservices-krb*.conf | tail -n 1 | awk '{print $9}') curl --negotiate --user alice@EXAMPLE.COM --include --request POST --header "Content-Type: multipart/form-data" --form "data=@mvnw.cmd" http://localhost:8080/api/upload
+KRB5_CONFIG=$(ls -latr /tmp/devservices-krb*.conf | tail -n 1 | awk '{print $9}') curl --negotiate -u alice@JOBJECTS.ORG -i -X POST -H "Content-Type: multipart/form-data" --form "data=@mvnw.cmd" http://localhost:8088/api/upload
+KRB5_CONFIG=$(ls -latr /tmp/devservices-krb*.conf | tail -n 1 | awk '{print $9}') curl --negotiate --trace-time --trace-ids --trace target/log.log --user alice@JOBJECTS.ORG --include --request POST --header "Content-Type: multipart/form-data" --form "data=@mvnw.cmd" http://localhost:8088/api/upload
+KRB5_CONFIG=$(ls -latr /tmp/devservices-krb*.conf | tail -n 1 | awk '{print $9}') curl --negotiate --user alice@JOBJECTS.ORG --include --request POST --header "Content-Type: multipart/form-data" --form "data=@mvnw.cmd" http://localhost:8088/api/upload
 
 KRB5_CONFIG=$(ls -latr /tmp/devservices-krb*.conf | tail -n 1 | awk '{print $9}') kdestroy
 KRB5_CONFIG=$(ls -latr /tmp/devservices-krb*.conf | tail -n 1 | awk '{print $9}') klist
@@ -298,14 +298,14 @@ __  ____  __  _____   ___  __ ____  ______
  --/ __ \/ / / / _ | / _ \/ //_/ / / / __/ 
  -/ /_/ / /_/ / __ |/ , _/ ,< / /_/ /\ \   
 --\___\_\____/_/ |_/_/|_/_/|_|\____/___/   
-2024-11-29 17:41:45,246 INFO  [io.quarkus] (main) kdownload 1.0-SNAPSHOT native (powered by Quarkus 3.16.4) started in 0.050s. Listening on: http://0.0.0.0:8080
+2024-11-29 17:41:45,246 INFO  [io.quarkus] (main) kdownload 1.0-SNAPSHOT native (powered by Quarkus 3.16.4) started in 0.050s. Listening on: http://0.0.0.0:8088
 2024-11-29 17:41:45,246 INFO  [io.quarkus] (main) Profile prod activated. 
 2024-11-29 17:41:45,246 INFO  [io.quarkus] (main) Installed features: [cdi, config-yaml, kerberos, rest, rest-client, security, smallrye-context-propagation, vertx]
 
 mickael@deborah:~/Documents/kerberos/kdownload$ kinit mickael
 Password for mickael@JOBJECTS.ORG: 
-mickael@deborah:~/Documents/kerberos/kdownload$ curl --negotiate --user mickael@JOBJECTS.ORG --include --request POST --header "Content-Type: multipart/form-data" --form "data=@mvnw.cmd" http://deborah.jobjecst.org:8080/api/upload
-curl --negotiate --user mickael@JOBJECTS.ORG http://deborah.jobjecst.org:8080/api/users/me
+mickael@deborah:~/Documents/kerberos/kdownload$ curl --negotiate --user mickael@JOBJECTS.ORG --include --request POST --header "Content-Type: multipart/form-data" --form "data=@mvnw.cmd" http://deborah.jobjecst.org:8088/api/upload
+curl --negotiate --user mickael@JOBJECTS.ORG http://deborah.jobjecst.org:8088/api/users/me
 ~~~bash
 
 ~~~bash
@@ -318,7 +318,7 @@ quarkus build --native -Dquarkus.container-image.build=true -Dquarkus.native.con
 quarkus build --native -Dquarkus.container-image.build=true -Dquarkus.native.container-runtime=podman
 podman image ls | grep kdownload
 
-firewall-cmd --zone=public --add-port=8080/tcp --permanent
+firewall-cmd --zone=public --add-port=8088/tcp --permanent
 firewall-cmd --complete-reload
 firewall-cmd --list-all
 
@@ -329,13 +329,14 @@ quarkus build --native -Dquarkus.container-image.build=true -Dquarkus.native.con
 ~~~
 
 ~~~bash
-VERSION=1.0.3
+VERSION=1.0.7
 # build
 quarkus build --native -Dquarkus.container-image.build=true -Dquarkus.native.container-runtime=podman --no-tests
 podman build --tag mpatron/kdownload:${VERSION} --file ./Dockerfile
-podman save localhost/mpatron/kdownload:${VERSION} -o /mnt/c/Temp/kdownload.tar.gz
+podman save localhost/mpatron/kdownload:${VERSION} -o /mnt/c/Temp/kdownload-${VERSION}.tar
+skopeo copy docker-archive:/mnt/c/Temp/kdownload-${VERSION}.tar docker://harbor.jobjects.org/myproject/kdownload-${VERSION}
 # lancement
-podman run --rm --detach --replace --cap-add=NET_RAW --name kdownload  --volume /home/mickael/tmp:/work/keytabs --volume ./podman/krb5.conf:/etc/krb5.conf --publish 8080:8080 --env KEYTAB_FILE=/work/keytabs/http.deborah.jobjects.org.keytab mpatron/kdownload:${VERSION}
+podman run --rm --detach --replace --cap-add=NET_RAW --name kdownload  --volume /home/mickael/tmp:/work/keytabs --volume ./podman/krb5.conf:/etc/krb5.conf --publish 8088:8088 --env KEYTAB_FILE=/work/keytabs/http.deborah.jobjects.org.keytab mpatron/kdownload:${VERSION}
 # Eteindre
 podman stop kdownload 
 # show log
@@ -346,8 +347,10 @@ podman exec -it kdownload /bin/bash
 
 ~~~bash
 kinit mickael@JOBJECTS.ORG
-curl --verbose --negotiate http://deborah.jobjects.org:8080/api/users/me
+curl --verbose http://deborah.jobjects.org:8088/hello
+curl --verbose --negotiate http://deborah.jobjects.org:8088/identity
+curl --verbose --negotiate http://deborah.jobjects.org:8088/api/users/me
 # Quand on envoie un fichier (ici 'mvnw.cmd'), il sera mis dans /tmp/$USER.keytab du containener
-curl --verbose --negotiate --include --request POST --header "Content-Type: multipart/form-data" --form "data=@mvnw.cmd" http://localhost:8080/api/upload
-curl --verbose --negotiate --include --request POST --header "Content-Type: multipart/form-data" --form "data=@$(klist | grep FILE | cut -d : -f 3)" http://deborah.jobjects.org:8080/api/upload
+curl --verbose --negotiate --include --request POST --header "Content-Type: multipart/form-data" --form "data=@mvnw.cmd" http://localhost:8088/api/upload
+curl --verbose --negotiate --include --request POST --header "Content-Type: multipart/form-data" --form "data=@$(klist | grep FILE | cut -d : -f 3)" http://deborah.jobjects.org:8088/api/upload
 ~~~

@@ -20,7 +20,7 @@ RUN chmod 775 /work /work/application \
   && chmod -R "g+rwX" /work \
   && chown -R 1001:root /work
 
-EXPOSE 8080
+EXPOSE 8088
 EXPOSE 88/tcp
 EXPOSE 88/udp
 USER 1001

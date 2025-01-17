@@ -28,7 +28,7 @@ RUN mkdir -p /work/keytabs \
 COPY --chown=${UID}:${GID} --chmod=555 target/*-runner /work/application
 COPY --chown=${UID}:${GID} --chmod=555 podman/docker_entrypoint_start-quarkus.sh /work/docker_entrypoint_start-quarkus.sh
 
-EXPOSE 8080
+EXPOSE 8088
 EXPOSE 88/tcp
 EXPOSE 88/udp
 USER ${USERNAME}

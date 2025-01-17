@@ -22,7 +22,7 @@ QUARKUS_OPS="$QUARKUS_OPS -Dquarkus.kerberos.service-principal-realm=$KD_SERVICE
 QUARKUS_OPS="$QUARKUS_OPS -Dquarkus.kerberos.debug=true"
 QUARKUS_OPS="$QUARKUS_OPS -Dquarkus.kerberos.enabled=true"
 QUARKUS_OPS="$QUARKUS_OPS -Dquarkus.http.host=0.0.0.0"
-QUARKUS_OPS="$QUARKUS_OPS -Dquarkus.http.port=8080"
+QUARKUS_OPS="$QUARKUS_OPS -Dquarkus.http.port=8088"
 QUARKUS_OPS="$QUARKUS_OPS -Dquarkus.http.access-log.enabled=true"
 
 echo "**********************************"

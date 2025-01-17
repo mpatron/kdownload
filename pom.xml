@@ -53,6 +53,7 @@
             <groupId>io.quarkiverse.kerberos</groupId>
             <artifactId>quarkus-kerberos-client</artifactId>
             <version>2.2.0</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>

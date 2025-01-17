@@ -11,7 +11,7 @@
 #
 # Then run the container using:
 #
-# docker run -i --rm -p 8080:8080 quarkus/kdownload
+# docker run -i --rm -p 8088:8088 quarkus/kdownload
 #
 ###
 FROM registry.access.redhat.com/ubi8/ubi-minimal:8.10
@@ -21,7 +21,7 @@ RUN chown 1001 /work \
     && chown 1001:root /work
 COPY --chown=1001:root target/*-runner /work/application
 
-EXPOSE 8080
+EXPOSE 8088
 EXPOSE 88/tcp
 EXPOSE 88/udp
 USER 1001

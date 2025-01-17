@@ -2,13 +2,13 @@ package org.jobjects;
 
 import java.io.File;
 import java.io.IOException;
-import io.quarkus.logging.Log; 
 
 import org.apache.commons.io.FileUtils;
 import org.jboss.resteasy.reactive.RestForm;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
 
 import io.quarkiverse.kerberos.KerberosPrincipal;
+import io.quarkus.logging.Log;
 import io.quarkus.security.Authenticated;
 import io.quarkus.security.identity.SecurityIdentity;
 import jakarta.inject.Inject;
@@ -34,7 +34,8 @@ public class UploadResource {
   public void multipart(@RestForm String description, @RestForm("data") FileUpload file) {
     Utils.affiche();
     String principaleName = identity.getPrincipal().getName();
-    String destFilePath = String.format("/tmp/%s.keytab", principaleName);
+    String realmName = kerberosPrincipal.getRealm();
+    String destFilePath = String.format("/tmp/tgt-%s-%s.keytab", principaleName, realmName);
     Log.info(String.format("fileName=%s", destFilePath));
     File source = file.uploadedFile().toFile();
     File dest = new File(destFilePath);
