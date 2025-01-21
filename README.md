@@ -333,7 +333,7 @@ java --class-path target/kdownload-1.0-SNAPSHOT.jar:/home/mickael/.m2/repository
 ~~~
 
 ~~~bash
-VERSION=1.0.7
+VERSION=1.0.8
 # build
 mvn clean package -DskipTests
 quarkus build --native -Dquarkus.container-image.build=true -Dquarkus.native.container-runtime=podman --no-tests
