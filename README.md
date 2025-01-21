@@ -326,23 +326,38 @@ sudo apt install build-essential musl-tools libz-dev zlib1g-dev
 
 quarkus build --native -Dquarkus.container-image.build=true --no-tests
 quarkus build --native -Dquarkus.container-image.build=true -Dquarkus.native.container-runtime=podman --no-tests
+
+mvn package -DskipTests
+mvn test -Dtest=UtilsTest
+java --class-path target/kdownload-1.0-SNAPSHOT.jar:/home/mickael/.m2/repository/io/quarkus/quarkus-core/3.16.4/quarkus-core-3.16.4.jar org.jobjects.Main google.com
 ~~~
 
 ~~~bash
 VERSION=1.0.7
 # build
+mvn clean package -DskipTests
 quarkus build --native -Dquarkus.container-image.build=true -Dquarkus.native.container-runtime=podman --no-tests
 podman build --tag mpatron/kdownload:${VERSION} --file ./Dockerfile
-podman save localhost/mpatron/kdownload:${VERSION} -o /mnt/c/Temp/kdownload-${VERSION}.tar
-skopeo copy docker-archive:/mnt/c/Temp/kdownload-${VERSION}.tar docker://harbor.jobjects.org/myproject/kdownload-${VERSION}
 # lancement
 podman run --rm --detach --replace --cap-add=NET_RAW --name kdownload  --volume /home/mickael/tmp:/work/keytabs --volume ./podman/krb5.conf:/etc/krb5.conf --publish 8088:8088 --env KEYTAB_FILE=/work/keytabs/http.deborah.jobjects.org.keytab mpatron/kdownload:${VERSION}
 # Eteindre
 podman stop kdownload 
-# show log
+# Show log
 podman logs kdownload
-# debug
+# Debug
 podman exec -it kdownload /bin/bash
+# Save
+podman save localhost/mpatron/kdownload:${VERSION} -o /mnt/c/Temp/kdownload-${VERSION}.tar
+skopeo copy docker-archive:/mnt/c/Temp/kdownload-${VERSION}.tar docker://harbor.jobjects.org/myproject/kdownload-${VERSION}
+~~~
+
+## Test de santé
+
+~~~bash
+curl --verbose http://localhost:8088/q/health/started
+curl --verbose http://localhost:8088/q/health/live
+curl --verbose http://localhost:8088/q/health/ready
+curl --verbose http://localhost:8088/q/health
 ~~~
 
 ~~~bash

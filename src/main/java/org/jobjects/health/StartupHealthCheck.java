@@ -14,4 +14,5 @@ public class StartupHealthCheck implements HealthCheck {
 	public HealthCheckResponse call() {
 		return HealthCheckResponse.up("Startup health check");
 	}
+
 }

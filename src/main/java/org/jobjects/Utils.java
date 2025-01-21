@@ -1,7 +1,11 @@
 package org.jobjects;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
 
 import io.quarkus.logging.Log;
 
@@ -30,4 +34,41 @@ public class Utils {
      */
 
   }
+
+  public static boolean isAccessDNSByName(String fqdn) {
+    boolean returnValue = Boolean.FALSE;
+    if(StringUtils.isNotBlank(fqdn)) {
+      try {
+        InetAddress address = InetAddress.getByName(StringUtils.trim(fqdn));
+        Log.info("host address: " + address.getHostAddress());
+        returnValue = Boolean.TRUE;
+      } catch (UnknownHostException e) {
+        Log.info("Cannot find in DNS : " + fqdn, e);
+      }
+      }
+    return returnValue;
+  }
+
+  public static boolean isFqdnInServicePrincipalNameExist(String servicePrincipalName) {
+    boolean returnValue = Boolean.FALSE;
+    if(StringUtils.isNotBlank(servicePrincipalName)) {
+      String[] chaines= StringUtils.split(servicePrincipalName, "/");
+      if (chaines.length>1) {
+        returnValue= isAccessDNSByName(chaines[1]);
+      }
+    }
+    return returnValue;
+  }
+
+  public static String getFqdnInServicePrincipal(String servicePrincipalName) {
+    String returnValue = null;
+    if(StringUtils.isNotBlank(servicePrincipalName)) {
+      String[] chaines= StringUtils.split(servicePrincipalName, "/");
+      if (chaines.length>1) {
+        returnValue= chaines[1];
+      }
+    }
+    return returnValue;
+  }
+
 }
