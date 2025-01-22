@@ -43,7 +43,7 @@ public class Utils {
         Log.info("host address: " + address.getHostAddress());
         returnValue = Boolean.TRUE;
       } catch (UnknownHostException e) {
-        Log.info("Cannot find in DNS : " + fqdn, e);
+        Log.info(String.format("Cannot find in DNS : '%s' with java error : %s", fqdn, e));
       }
       }
     return returnValue;

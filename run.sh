@@ -19,5 +19,5 @@ QUARKUS_OPS="$QUARKUS_OPS -Dquarkus.kerberos.enabled=true"
 # QUARKUS_OPS=$QUARKUS_OPS -Dquarkus.kerberos.devservices.realm=JOBJECTS.ORG
 # QUARKUS_OPS=$QUARKUS_OPS -Dquarkus.kerberos.devservices.enabled=false
 quarkus build --native
-echo ~/Documents/kerberos/kdownload/target/kdownload-1.0-SNAPSHOT-runner $QUARKUS_OPS
-~/Documents/kerberos/kdownload/target/kdownload-1.0-SNAPSHOT-runner $QUARKUS_OPS 
+echo ~/Documents/kerberos/kdownload/target/kdownload-1.0.9-runner $QUARKUS_OPS
+~/Documents/kerberos/kdownload/target/kdownload-1.0.9-runner $QUARKUS_OPS 
