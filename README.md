@@ -216,7 +216,7 @@ KRB5_CONFIG=$(ls -latr /tmp/devservices-krb*.conf | tail -n 1 | awk '{print $9}'
 
 export QUARKUS_KERBEROS_ENABLED=true 
 export QUARKUS_KERBEROS_DEBUG=true 
-export QUARKUS_KERBEROS_KEYTAB_PATH=/home/mickael/tmp/http.deborah.jobjects.org.keytab
+export QUARKUS_KERBEROS_KEYTAB_PATH=/home/${USER}/tmp/http.deborah.jobjects.org.keytab
 export QUARKUS_KERBEROS_SERVICE_PRINCIPAL_NAME="HTTP/deborah.jobjects.org"
 export QUARKUS_KERBEROS_SERVICE_PRINCIPAL_REALM=JOBJECTS.ORG
 ~~~
@@ -327,9 +327,8 @@ sudo apt install build-essential musl-tools libz-dev zlib1g-dev
 quarkus build --native -Dquarkus.container-image.build=true --no-tests
 quarkus build --native -Dquarkus.container-image.build=true -Dquarkus.native.container-runtime=podman --no-tests
 
-mvn package -DskipTests
-mvn test -Dtest=UtilsTest
-java --class-path target/kdownload-1.0.9.jar:/home/mickael/.m2/repository/io/quarkus/quarkus-core/3.16.4/quarkus-core-3.16.4.jar org.jobjects.Main google.com
+mvn clean package -DskipTests
+mvn clean test -Dtest=UtilsTest
 ~~~
 
 ~~~bash
@@ -337,11 +336,9 @@ VERSION=1.0.9
 # build
 mvn clean package -DskipTests
 mvn clean && quarkus build --native -Dquarkus.container-image.build=true -Dquarkus.native.container-runtime=podman
-
 mvn clean && quarkus build --native -Dquarkus.container-image.build=true -Dquarkus.native.container-runtime=podman --no-tests
-podman build --tag ${USER}/kdownload:${VERSION} --file ./Dockerfile
 # lancement
-podman run --rm --detach --replace --cap-add=NET_RAW --name kdownload  --volume /home/mickael/tmp:/work/keytabs --volume ./podman/krb5.conf:/etc/krb5.conf --publish 8088:8088 --env KEYTAB_FILE=/work/keytabs/http.deborah.jobjects.org.keytab ${USER}/kdownload:${VERSION}
+podman run --rm --detach --replace --cap-add=NET_RAW --name kdownload  --volume /home/${USER}/tmp:/work/keytabs --volume ./podman/krb5.conf:/etc/krb5.conf --publish 8088:8088 --env KEYTAB_FILE=/work/keytabs/http.deborah.jobjects.org.keytab ${USER}/kdownload:${VERSION}
 # Eteindre
 podman stop kdownload 
 # Show log
@@ -349,7 +346,7 @@ podman logs kdownload
 # Debug
 podman exec -it kdownload /bin/bash
 # Save
-podman save localhost/mpatron/kdownload:${VERSION} -o /mnt/c/Temp/kdownload-${VERSION}.tar
+podman save localhost/${USER}/kdownload:${VERSION} -o /mnt/c/Temp/kdownload-${VERSION}.tar
 skopeo copy docker-archive:/mnt/c/Temp/kdownload-${VERSION}.tar docker://harbor.jobjects.org/myproject/kdownload-${VERSION}
 ~~~
 
