@@ -29,4 +29,4 @@ echo "**********************************"
 echo "-> Log: Execute java native command "
 echo " './application $QUARKUS_OPS'"
 echo "**********************************"
-/work/application $QUARKUS_OPS
+/work/application $QUARKUS_OPS $*
