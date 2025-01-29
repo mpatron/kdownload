@@ -332,7 +332,7 @@ mvn clean test -Dtest=UtilsTest
 ~~~
 
 ~~~bash
-VERSION=1.0.12
+VERSION=1.0.15
 # build
 mvn clean package -DskipTests
 mvn clean && quarkus build --native -Dquarkus.container-image.build=true -Dquarkus.native.container-runtime=podman
@@ -340,7 +340,7 @@ mvn clean && quarkus build --native -Dquarkus.container-image.build=true -Dquark
 # lancement
 podman run --rm --detach --replace --cap-add=NET_RAW --name kdownload  --volume /home/${USER}/tmp:/work/keytabs --volume ./podman/krb5.conf:/etc/krb5.conf --publish 8088:8088 --env KEYTAB_FILE=/work/keytabs/http.deborah.jobjects.org.keytab ${USER}/kdownload:${VERSION}
 # Eteindre
-podman stop kdownload 
+podman stop kdownload
 # Show log
 podman logs kdownload
 # Debug
@@ -360,7 +360,7 @@ curl --verbose http://localhost:8088/q/health
 ~~~
 
 ~~~bash
-kinit mickael@JOBJECTS.ORG
+printf 'HelloWorld!' | kinit mickael@JOBJECTS.ORG
 curl --verbose http://deborah.jobjects.org:8088/hello
 curl --verbose --negotiate http://deborah.jobjects.org:8088/identity
 curl --verbose --negotiate http://deborah.jobjects.org:8088/api/users/me

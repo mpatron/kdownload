@@ -92,8 +92,20 @@ EXPOSE 8088
 EXPOSE 88/tcp
 EXPOSE 88/udp
 USER 185
-ENV JAVA_OPTS_APPEND="-Dquarkus.http.host=0.0.0.0 -Djava.util.logging.manager=org.jboss.logmanager.LogManager"
+ENV JAVA_OPTS_APPEND="-Dquarkus.http.host=0.0.0.0 \
+  -Djava.util.logging.manager=org.jboss.logmanager.LogManager \
+  -Dquarkus.kerberos.keytab-path=/work/keytabs/http.deborah.jobjects.org.keytab \
+  -Dquarkus.kerberos.service-principal-name=HTTP/deborah.jobjects.org \
+  -Dquarkus.kerberos.service-principal-realm=JOBJECTS.ORG \
+  -Dquarkus.kerberos.debug=true -Dquarkus.kerberos.enabled=true \
+  -Dquarkus.http.host=0.0.0.0 -Dquarkus.http.port=8088 \
+  -Dquarkus.http.access-log.enabled=true \
+  -Dquarkus.log.level=ALL \
+  -Dquarkus.log.min-level=ALL \
+  -Dquarkus.log.category.\"io.quarkiverse.kerberos.runtime.KerberosIdentityProvider\".level=TRACE \
+  -Dquarkus.log.category.\"io.quarkiverse.kerberos.runtime.KerberosIdentityProvider\".min-level=TRACE"
 ENV JAVA_APP_JAR="/deployments/quarkus-run.jar"
 
 ENTRYPOINT [ "/opt/jboss/container/java/run/run-java.sh" ]
+
 
