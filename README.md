@@ -332,7 +332,7 @@ mvn clean test -Dtest=UtilsTest
 ~~~
 
 ~~~bash
-VERSION=1.0.16
+VERSION=1.0.17
 # build
 mvn clean package -DskipTests
 mvn clean && quarkus build --native -Dquarkus.container-image.build=true -Dquarkus.native.container-runtime=podman
