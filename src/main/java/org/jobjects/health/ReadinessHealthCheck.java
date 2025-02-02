@@ -20,7 +20,7 @@ public class ReadinessHealthCheck implements HealthCheck {
 
 	@Override
 	public HealthCheckResponse call() {
-
+		
 		HealthCheckResponseBuilder responseBuilder = HealthCheckResponse.named("Ready health check");
 
 		if (StringUtils.isNotBlank(config.kerberos().get("service-principal-name"))) {
@@ -31,6 +31,8 @@ public class ReadinessHealthCheck implements HealthCheck {
 						.withData("service-principal-realm", config.kerberos().get("service-principal-realm"));
 				responseBuilder.withData(
 						Utils.getFqdnInServicePrincipal(config.kerberos().get("service-principal-name")), "DNS exist");
+				responseBuilder.withData("JCE uses unlimited policy",
+					Utils.isJCEusesUnlimitedPolicy());
 				responseBuilder.up();
 			}
 		} else {

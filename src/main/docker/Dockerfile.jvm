@@ -89,7 +89,7 @@ LABEL org.opencontainers.image.description="A RedHat UBI 8 based runner image fo
 LABEL org.opencontainers.image.authors="Mickael Patron"
 LABEL org.opencontainers.image.licenses="MIT"
 LABEL org.opencontainers.image.documentation="https://github.com/mpatron/kdownload/README.md"
-RUN microdnf install --nodocs --assumeyes --best shadow-utils krb5-workstation bind-utils iputils openldap-clients && microdnf clean all
+RUN microdnf install --nodocs --assumeyes --best shadow-utils krb5-workstation bind-utils iputils openldap-clients vim && microdnf clean all
 
 # We make four distinct layers so if there are application changes the library layers can be re-used
 COPY --chown=185 target/quarkus-app/lib/ /deployments/lib/

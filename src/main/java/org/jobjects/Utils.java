@@ -2,6 +2,7 @@ package org.jobjects;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -37,7 +38,7 @@ public class Utils {
 
   public static boolean isAccessDNSByName(String fqdn) {
     boolean returnValue = Boolean.FALSE;
-    if(StringUtils.isNotBlank(fqdn)) {
+    if (StringUtils.isNotBlank(fqdn)) {
       try {
         InetAddress address = InetAddress.getByName(StringUtils.trim(fqdn));
         Log.info("host address: " + address.getHostAddress());
@@ -45,16 +46,16 @@ public class Utils {
       } catch (UnknownHostException e) {
         Log.info(String.format("Cannot find in DNS : '%s' with java error : %s", fqdn, e));
       }
-      }
+    }
     return returnValue;
   }
 
   public static boolean isFqdnInServicePrincipalNameExist(String servicePrincipalName) {
     boolean returnValue = Boolean.FALSE;
-    if(StringUtils.isNotBlank(servicePrincipalName)) {
-      String[] chaines= StringUtils.split(servicePrincipalName, "/");
-      if (chaines.length>1) {
-        returnValue= isAccessDNSByName(chaines[1]);
+    if (StringUtils.isNotBlank(servicePrincipalName)) {
+      String[] chaines = StringUtils.split(servicePrincipalName, "/");
+      if (chaines.length > 1) {
+        returnValue = isAccessDNSByName(chaines[1]);
       }
     }
     return returnValue;
@@ -62,11 +63,24 @@ public class Utils {
 
   public static String getFqdnInServicePrincipal(String servicePrincipalName) {
     String returnValue = null;
-    if(StringUtils.isNotBlank(servicePrincipalName)) {
-      String[] chaines= StringUtils.split(servicePrincipalName, "/");
-      if (chaines.length>1) {
-        returnValue= chaines[1];
+    if (StringUtils.isNotBlank(servicePrincipalName)) {
+      String[] chaines = StringUtils.split(servicePrincipalName, "/");
+      if (chaines.length > 1) {
+        returnValue = chaines[1];
       }
+    }
+    return returnValue;
+  }
+
+  public static boolean isJCEusesUnlimitedPolicy() {
+    boolean returnValue = Boolean.FALSE;
+    int maxKeySize = 0;
+    try {
+      maxKeySize = javax.crypto.Cipher.getMaxAllowedKeyLength("AES");
+      Log.info(String.format("AES = %d (>128 then JCE uses unlimited policy files)", maxKeySize));
+      returnValue = maxKeySize > 128;
+    } catch (NoSuchAlgorithmException e) {
+      Log.info(String.format("JCE uses unlimited policy files %d", maxKeySize), e);
     }
     return returnValue;
   }

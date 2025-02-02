@@ -337,6 +337,7 @@ VERSION=1.0.17
 mvn clean package -DskipTests
 mvn clean && quarkus build --native -Dquarkus.container-image.build=true -Dquarkus.native.container-runtime=podman
 mvn clean && quarkus build --native -Dquarkus.container-image.build=true -Dquarkus.native.container-runtime=podman --no-tests
+mvn clean && quarkus build -Dquarkus.container-image.build=true --no-tests
 # lancement
 podman run --rm --detach --replace --cap-add=NET_RAW --name kdownload  --volume /home/${USER}/tmp:/work/keytabs --volume ./podman/krb5.conf:/etc/krb5.conf --publish 8088:8088 --env KEYTAB_FILE=/work/keytabs/http.deborah.jobjects.org.keytab ${USER}/kdownload:${VERSION}
 # Eteindre
