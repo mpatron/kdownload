@@ -370,6 +370,8 @@ curl --verbose --negotiate --include --request POST --header "Content-Type: mult
 curl --verbose --negotiate --include --request POST --header "Content-Type: multipart/form-data" --form "data=@$(klist | grep FILE | cut -d : -f 3)" http://deborah.jobjects.org:8088/api/upload
 ~~~
 
+## Avec un Actice Directory
+
 ~~~powershell
 New-ADUser kdownload `
 -Surname kdownload `
@@ -392,17 +394,42 @@ New-ADUser alice `
 Get-ADUser -Identity alice
 
 ktpass /princ HTTP/ubuntu.jobjects.org@JOBJECTS.ORG /mapuser kdownload /pass 'HelloWorld!' /out kdownload.keytab /crypto all /ptype KRB5_NT_PRINCIPAL /mapop set /target monad.jobjects.org
+~~~
 
-$ ldapsearch -h  monad.jobjects.org -D example-user@ monad.jobjects.org -W -b "cn=users,dc=monad,dc=jobjects,dc=org" "(cn=kdownload)" msDS-KeyVersionNumber
+~~~bash
+[alice@88ed32d9c2af work]$ ldapsearch -h  monad.jobjects.org -D administrateur@JOBJECTS.ORG -w "HelloWorld!" -b "cn=users,dc=jobjects,dc=org" "(objectClass=person)" msDS-KeyVersionNumber
 # extended LDIF
 #
 # LDAPv3
-# base <cn=users,dc=ad,dc=example,dc=com> with scope subtree
-# filter: (cn=example-user)
-# requesting: msDS-KeyVersionNumber 
+# base <cn=users,dc=jobjects,dc=org> with scope subtree
+# filter: (objectClass=person)
+# requesting: msDS-KeyVersionNumber
 #
 
-# example-user, Users, ad.example.com
-dn: CN=example-user,CN=Users,DC=ad,DC=example,DC=com
-msDS-KeyVersionNumber: 5
+# Administrateur, Users, jobjects.org
+dn: CN=Administrateur,CN=Users,DC=jobjects,DC=org
+msDS-KeyVersionNumber: 1
+
+# Invit\C3\A9, Users, jobjects.org
+dn:: Q049SW52aXTDqSxDTj1Vc2VycyxEQz1qb2JqZWN0cyxEQz1vcmc=
+msDS-KeyVersionNumber: 1
+
+# krbtgt, Users, jobjects.org
+dn: CN=krbtgt,CN=Users,DC=jobjects,DC=org
+msDS-KeyVersionNumber: 2
+
+# kdownload, Users, jobjects.org
+dn: CN=kdownload,CN=Users,DC=jobjects,DC=org
+msDS-KeyVersionNumber: 3
+
+# alice, Users, jobjects.org
+dn: CN=alice,CN=Users,DC=jobjects,DC=org
+msDS-KeyVersionNumber: 2
+
+# search result
+search: 2
+result: 0 Success
+
+# numResponses: 6
+# numEntries: 5
 ~~~
