@@ -372,6 +372,8 @@ curl --verbose http://localhost:8088/q/health
 printf 'HelloWorld!' | kinit alice@JOBJECTS.ORG
 curl --verbose http://localhost:8088/hello
 curl --verbose --negotiate http://localhost:8088/identity
+curl -vvv --negotiate -u : http://ubuntu.jobjects.org:8088/identity
+
 curl --verbose --negotiate http://localhost:8088/api/users/me
 # Quand on envoie un fichier (ici 'mvnw.cmd'), il sera mis dans /tmp/$USER.keytab du containener
 curl --verbose --negotiate --include --request POST --header "Content-Type: multipart/form-data" --form "data=@mvnw.cmd" http://localhost:8088/api/upload
@@ -452,3 +454,28 @@ KVNO Timestamp         Principal
    3 01/01/70 00:00:00 HTTP/ubuntu.jobjects.org@JOBJECTS.ORG (aes256-cts-hmac-sha1-96)  (0x9d504a62a8cea9dde306b91e7805cc5699196261f02506edcf0f14923876a9fa)
    3 01/01/70 00:00:00 HTTP/ubuntu.jobjects.org@JOBJECTS.ORG (aes128-cts-hmac-sha1-96)  (0x33b3009b68f5fee1118f1a211242e528)
 ~~~
+
+
+podman run --interactive --tty --replace --name ubuntu ubuntu /bin/bash
+apt update
+apt install -yqq krb5-user libpam-krb5 ldap-utils dnsutils vim libpam-krb5 nginx-full curl
+mkdir /var/www/html/test
+chown www-data:www-data /var/www/html/test -R
+cat << EOF > /etc/nginx/sites-available/default
+location /test {
+	auth_pam "Secure area";
+	auth_pam_service_name "nginx";
+}
+EOF
+[alice@f8f916f515b2 keytabs]$ kinit -Vkt /work/keytabs/kdownload.keytab HTTP/ubuntu.jobjects.org@JOBJECTS.ORG
+Using default cache: /tmp/krb5cc_1000
+Using principal: HTTP/ubuntu.jobjects.org@JOBJECTS.ORG
+Using keytab: /work/keytabs/kdownload.keytab
+Authenticated to Kerberos v5
+[alice@f8f916f515b2 keytabs]$ klist
+Ticket cache: FILE:/tmp/krb5cc_1000
+Default principal: HTTP/ubuntu.jobjects.org@JOBJECTS.ORG
+
+Valid starting     Expires            Service principal
+02/24/25 22:25:42  02/25/25 08:25:42  krbtgt/JOBJECTS.ORG@JOBJECTS.ORG
+        renew until 02/25/25 22:25:42
