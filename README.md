@@ -370,9 +370,9 @@ curl --verbose http://localhost:8088/q/health
 
 ~~~bash
 printf 'HelloWorld!' | kinit alice@JOBJECTS.ORG
-curl --verbose http://deborah.jobjects.org:8088/hello
-curl --verbose --negotiate http://deborah.jobjects.org:8088/identity
-curl --verbose --negotiate http://deborah.jobjects.org:8088/api/users/me
+curl --verbose http://localhost:8088/hello
+curl --verbose --negotiate http://localhost:8088/identity
+curl --verbose --negotiate http://localhost:8088/api/users/me
 # Quand on envoie un fichier (ici 'mvnw.cmd'), il sera mis dans /tmp/$USER.keytab du containener
 curl --verbose --negotiate --include --request POST --header "Content-Type: multipart/form-data" --form "data=@mvnw.cmd" http://localhost:8088/api/upload
 curl --verbose --negotiate --include --request POST --header "Content-Type: multipart/form-data" --form "data=@$(klist | grep FILE | cut -d : -f 3)" http://deborah.jobjects.org:8088/api/upload
@@ -401,6 +401,8 @@ New-ADUser alice `
 -Enabled $true
 Get-ADUser -Identity alice
 
+dsadd computer CN=ubuntu,CN=Computers,DC=jobjects,DC=org
+setspn -S HTTP/ubuntu.jobjects.org kdownload
 ktpass /princ HTTP/ubuntu.jobjects.org@JOBJECTS.ORG /mapuser kdownload /pass 'HelloWorld!' /out kdownload.keytab /crypto all /ptype KRB5_NT_PRINCIPAL /mapop set /target monad.jobjects.org
 ~~~
 
