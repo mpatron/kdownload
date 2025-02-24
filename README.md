@@ -339,7 +339,15 @@ mvn clean && quarkus build --native -Dquarkus.container-image.build=true -Dquark
 mvn clean && quarkus build --native -Dquarkus.container-image.build=true -Dquarkus.native.container-runtime=podman --no-tests
 mvn clean && quarkus build -Dquarkus.container-image.build=true --no-tests
 # lancement
-podman run --rm --detach --replace --cap-add=NET_RAW --name kdownload  --volume ${HOME}/tmp:/work/keytabs --volume ./podman/krb5.conf:/etc/krb5.conf --publish 8088:8088 --env KEYTAB_FILE=/work/keytabs/http.deborah.jobjects.org.keytab ${USER}/kdownload:${VERSION}
+podman run --rm --detach --replace --cap-add=NET_RAW --name kdownload \
+  --volume ${HOME}/tmp:/work/keytabs \
+  --volume ./podman/krb5.conf:/etc/krb5.conf \
+  --publish 8088:8088 \
+  --env KEYTAB_FILE=/work/keytabs/kdownload.keytab \
+  --env SERVICE_PRINCIPAL_NAME=HTTP/ubuntu.jobjects.org \
+  --env SERVICE_PRINCIPAL_REALM=JOBJECTS.ORG \
+  ${USER}/kdownload:${VERSION}
+
 # Eteindre
 podman stop kdownload
 # Show log
@@ -361,7 +369,7 @@ curl --verbose http://localhost:8088/q/health
 ~~~
 
 ~~~bash
-printf 'HelloWorld!' | kinit mickael@JOBJECTS.ORG
+printf 'HelloWorld!' | kinit alice@JOBJECTS.ORG
 curl --verbose http://deborah.jobjects.org:8088/hello
 curl --verbose --negotiate http://deborah.jobjects.org:8088/identity
 curl --verbose --negotiate http://deborah.jobjects.org:8088/api/users/me
@@ -432,4 +440,13 @@ result: 0 Success
 
 # numResponses: 6
 # numEntries: 5
+[alice@bc42084826cc work]$ klist -kKte /work/keytabs/kdownload.keytab
+Keytab name: FILE:/work/keytabs/kdownload.keytab
+KVNO Timestamp         Principal
+---- ----------------- --------------------------------------------------------
+   3 01/01/70 00:00:00 HTTP/ubuntu.jobjects.org@JOBJECTS.ORG (DEPRECATED:des-cbc-crc)  (0x85abd63857ec014c)
+   3 01/01/70 00:00:00 HTTP/ubuntu.jobjects.org@JOBJECTS.ORG (DEPRECATED:des-cbc-md5)  (0x85abd63857ec014c)
+   3 01/01/70 00:00:00 HTTP/ubuntu.jobjects.org@JOBJECTS.ORG (DEPRECATED:arcfour-hmac)  (0x2b51042f1bf402c2fc93bcd23309b603)
+   3 01/01/70 00:00:00 HTTP/ubuntu.jobjects.org@JOBJECTS.ORG (aes256-cts-hmac-sha1-96)  (0x9d504a62a8cea9dde306b91e7805cc5699196261f02506edcf0f14923876a9fa)
+   3 01/01/70 00:00:00 HTTP/ubuntu.jobjects.org@JOBJECTS.ORG (aes128-cts-hmac-sha1-96)  (0x33b3009b68f5fee1118f1a211242e528)
 ~~~
