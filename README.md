@@ -456,17 +456,32 @@ KVNO Timestamp         Principal
 ~~~
 
 
-podman run --interactive --tty --replace --name ubuntu ubuntu /bin/bash
+podman run --interactive --tty --replace --publish 8089:8089 --name ubuntu ubuntu /bin/bash
 apt update
-apt install -yqq krb5-user libpam-krb5 ldap-utils dnsutils vim libpam-krb5 nginx-full curl
+apt -yqq install krb5-user libpam-krb5 ldap-utils dnsutils vim libpam-krb5 nginx-full curl
 mkdir /var/www/html/test
 chown www-data:www-data /var/www/html/test -R
 cat << EOF > /etc/nginx/sites-available/default
-location /test {
-	auth_pam "Secure area";
-	auth_pam_service_name "nginx";
+server {
+        listen 8089 default_server;
+        listen [::]:8089 default_server;
+        root /var/www/html;
+        index index.html index.htm index.nginx-debian.html;
+        server_name _;
+        location / {
+                try_files $uri $uri/ =404;
+        }
+        location /test {
+                auth_pam "Secure area";
+                auth_pam_service_name "nginx";
+        }
 }
 EOF
+cat << EOF > /etc/pam.d/nginx
+auth required pam_krb5.so
+account required pam_krb5.so
+EOF
+service nginx restart
 [alice@f8f916f515b2 keytabs]$ kinit -Vkt /work/keytabs/kdownload.keytab HTTP/ubuntu.jobjects.org@JOBJECTS.ORG
 Using default cache: /tmp/krb5cc_1000
 Using principal: HTTP/ubuntu.jobjects.org@JOBJECTS.ORG
