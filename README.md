@@ -306,7 +306,7 @@ mickael@deborah:~/Documents/kerberos/kdownload$ kinit mickael
 Password for mickael@JOBJECTS.ORG: 
 mickael@deborah:~/Documents/kerberos/kdownload$ curl --negotiate --user mickael@JOBJECTS.ORG --include --request POST --header "Content-Type: multipart/form-data" --form "data=@mvnw.cmd" http://deborah.jobjecst.org:8088/api/upload
 curl --negotiate --user mickael@JOBJECTS.ORG http://deborah.jobjecst.org:8088/api/users/me
-~~~bash
+~~~
 
 ~~~bash
 unset QUARKUS_KERBEROS_ENABLED QUARKUS_KERBEROS_DEBUG QUARKUS_KERBEROS_KEYTAB_PATH QUARKUS_KERBEROS_SERVICE_PRINCIPAL_NAME QUARKUS_KERBEROS_SERVICE_PRINCIPAL_REALM
@@ -368,4 +368,41 @@ curl --verbose --negotiate http://deborah.jobjects.org:8088/api/users/me
 # Quand on envoie un fichier (ici 'mvnw.cmd'), il sera mis dans /tmp/$USER.keytab du containener
 curl --verbose --negotiate --include --request POST --header "Content-Type: multipart/form-data" --form "data=@mvnw.cmd" http://localhost:8088/api/upload
 curl --verbose --negotiate --include --request POST --header "Content-Type: multipart/form-data" --form "data=@$(klist | grep FILE | cut -d : -f 3)" http://deborah.jobjects.org:8088/api/upload
+~~~
+
+~~~powershell
+New-ADUser kdownload `
+-Surname kdownload `
+-GivenName kdownload `
+-DisplayName "srv kdownload" `
+-EmailAddress "kdownload@JOBJECTS.ORG" `
+-AccountPassword (ConvertTo-SecureString -AsPlainText "HelloWorld!" -Force) `
+-ChangePasswordAtLogon $false `
+-Enabled $true
+Get-ADUser -Identity kdownload
+
+New-ADUser alice `
+-Surname alice `
+-GivenName alice `
+-DisplayName "alice" `
+-EmailAddress "alice@JOBJECTS.ORG" `
+-AccountPassword (ConvertTo-SecureString -AsPlainText "HelloWorld!" -Force) `
+-ChangePasswordAtLogon $false `
+-Enabled $true
+Get-ADUser -Identity alice
+
+ktpass /princ HTTP/ubuntu.jobjects.org@JOBJECTS.ORG /mapuser kdownload /pass 'HelloWorld!' /out kdownload.keytab /crypto all /ptype KRB5_NT_PRINCIPAL /mapop set /target monad.jobjects.org
+
+$ ldapsearch -h  monad.jobjects.org -D example-user@ monad.jobjects.org -W -b "cn=users,dc=monad,dc=jobjects,dc=org" "(cn=kdownload)" msDS-KeyVersionNumber
+# extended LDIF
+#
+# LDAPv3
+# base <cn=users,dc=ad,dc=example,dc=com> with scope subtree
+# filter: (cn=example-user)
+# requesting: msDS-KeyVersionNumber 
+#
+
+# example-user, Users, ad.example.com
+dn: CN=example-user,CN=Users,DC=ad,DC=example,DC=com
+msDS-KeyVersionNumber: 5
 ~~~
