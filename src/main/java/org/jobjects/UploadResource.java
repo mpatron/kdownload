@@ -25,6 +25,8 @@ import jakarta.ws.rs.Path;
 public class UploadResource {
 
   @Inject
+  KerberosConfig config;
+  @Inject
   SecurityIdentity identity;
   @Inject
   KerberosPrincipal kerberosPrincipal;
@@ -35,7 +37,7 @@ public class UploadResource {
     Utils.affiche();
     String principaleName = identity.getPrincipal().getName();
     String realmName = kerberosPrincipal.getRealm();
-    String destFilePath = String.format("/tmp/tgt-%s-%s.keytab", principaleName, realmName);
+    String destFilePath = String.format(config.http().body().uploadsDirectory() + "/tgt-%s-%s.keytab", principaleName, realmName);
     Log.info(String.format("fileName=%s", destFilePath));
     File source = file.uploadedFile().toFile();
     File dest = new File(destFilePath);

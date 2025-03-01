@@ -6,7 +6,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 
 import io.quarkiverse.kerberos.test.utils.KerberosTestClient;
@@ -28,13 +27,12 @@ public class UploadResourceTest {
 
   @Test
   void testMultipart() throws Exception {
+    Log.debug(String.format("quarkus.http.body.uploads-directory => %s", config.http().body().uploadsDirectory()));
 
     given().when().get("/api/users/me").then().assertThat().statusCode(401).and().header(WWW_AUTHENTICATE, NEGOTIATE);
 
     KerberosTestClient kerberosTestClient = new KerberosTestClient();
     var result = kerberosTestClient.get("/api/users/me", "bob", "bob");
-    //result.statusCode(200).body(Matchers.is("bob"));
-
     String chaine = result.extract().header(WWW_AUTHENTICATE);
     Log.info(String.format(WWW_AUTHENTICATE + "=%s", chaine));
  

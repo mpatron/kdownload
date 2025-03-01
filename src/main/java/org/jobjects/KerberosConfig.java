@@ -7,6 +7,19 @@ import io.smallrye.config.WithName;
 
 @ConfigMapping(prefix = "quarkus")
 public interface KerberosConfig {
+
 	@WithName("kerberos")
-	public Map<String, String>  kerberos();
+	public Map<String, String> kerberos();
+
+	// quarkus.http.body.uploads-directory
+
+	Http http();
+
+	interface Http {
+		Body body();
+
+		interface Body {
+			String uploadsDirectory();
+		}
+	}
 }
