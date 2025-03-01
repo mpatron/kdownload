@@ -18,6 +18,30 @@ public class IdentityKerberos {
         this.realm = realm;
     }
 
+    public String getPrincipalName() {
+        return principalName;
+    }
+
+    public void setPrincipalName(String principalName) {
+        this.principalName = principalName;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public String getRealm() {
+        return realm;
+    }
+
+    public void setRealm(String realm) {
+        this.realm = realm;
+    }
+
     public String toString() {
         return new ToStringBuilder(this).append("principalName", principalName).append("fullName", fullName)
                 .append("realm", realm).toString();
