@@ -46,7 +46,7 @@ public class UtilsTest {
         try {
             int maxKeySize = javax.crypto.Cipher.getMaxAllowedKeyLength("AES");
             Log.info(String.format("AES = %d (>128 then JCE uses unlimited policy files)", maxKeySize));
-            assertTrue(maxKeySize>128, "JCE uses unlimited policy files");
+            assertTrue(maxKeySize > 128, "JCE uses unlimited policy files");
         } catch (NoSuchAlgorithmException e) {
             assertTrue(false);
             e.printStackTrace();

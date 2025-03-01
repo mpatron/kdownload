@@ -37,6 +37,7 @@ public class UploadResourceTest {
 
     String chaine = result.extract().header(WWW_AUTHENTICATE);
     Log.info(String.format(WWW_AUTHENTICATE + "=%s", chaine));
+ 
 
     final byte[] bytes = IOUtils.toByteArray(getClass().getResourceAsStream("/application.properties"));
 
@@ -57,15 +58,16 @@ public class UploadResourceTest {
       Log.info(String.format("ENV ====> %s = %s", string, System.getenv(string)));
     }
 
-    
     for (String string : config.kerberos().keySet()) {
       Log.info(String.format("KERBEROS ====> %s = %s", string, config.kerberos().get(string)));
     }
-    
+
     Log.info(String.format("KERBEROS CLIENT====> %s = %s", "user-principal-name", configClient.userPrincipalName()));
-    Log.info(String.format("KERBEROS CLIENT====> %s = %s", "user-principal-password", configClient.userPrincipalPassword()));
+    Log.info(
+        String.format("KERBEROS CLIENT====> %s = %s", "user-principal-password", configClient.userPrincipalPassword()));
     Log.info(String.format("KERBEROS CLIENT====> %s = %s", "user-principal-realm", configClient.userPrincipalRealm()));
-    Log.info(String.format("KERBEROS CLIENT====> %s = %s", "service-principal-name", configClient.servicePrincipalName()));
+    Log.info(
+        String.format("KERBEROS CLIENT====> %s = %s", "service-principal-name", configClient.servicePrincipalName()));
 
     /**
      * ========================================================================

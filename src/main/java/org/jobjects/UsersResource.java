@@ -7,7 +7,6 @@ import io.quarkus.security.identity.SecurityIdentity;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
 
 @Path("/api/users")
 @Authenticated
@@ -20,11 +19,19 @@ public class UsersResource {
 
 	@GET
 	@Path("/me")
-	@Produces("text/plain")
-	public String me() {
-		Utils.affiche();
-		String returnValue = identity.getPrincipal().getName();
-		Log.info("/api/users/me: " + returnValue);
+	public IdentityKerberos me() {
+		IdentityKerberos returnValue = null;
+		try {
+			Utils.affiche();
+			String principalName = identity.getPrincipal().getName();
+			String fullName = kerberosPrincipal.getFullName();
+			String realm = kerberosPrincipal.getRealm();
+			returnValue = new IdentityKerberos(principalName, fullName, realm);
+			Log.info("UsersResource => /api/users/me: " + returnValue);
+		} catch (Throwable e) {
+			Log.fatal(e.getMessage(), e);
+		}
+		Log.info(String.format("ReturnValue" + "=%s", returnValue));
 		return returnValue;
 	}
 }
