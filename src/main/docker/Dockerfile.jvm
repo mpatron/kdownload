@@ -106,6 +106,7 @@ ENV JAVA_OPTS_APPEND="-Dquarkus.http.host=0.0.0.0 \
   -Dquarkus.kerberos.keytab-path=/work/keytabs/http.deborah.jobjects.org.keytab \
   -Dquarkus.kerberos.service-principal-name=HTTP/deborah.jobjects.org \
   -Dquarkus.kerberos.service-principal-realm=JOBJECTS.ORG \
+  -Dquarkus.http.body.uploads-directory=/tmp \
   -Dquarkus.kerberos.debug=true -Dquarkus.kerberos.enabled=true \
   -Dquarkus.http.host=0.0.0.0 -Dquarkus.http.port=8088 \
   -Dquarkus.http.access-log.enabled=true \
