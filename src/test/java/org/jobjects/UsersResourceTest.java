@@ -33,8 +33,8 @@ public class UsersResourceTest {
         Log.debug("result=" + result.extract().asPrettyString());
 
         var identityKerberos = new IdentityKerberos("bob", "bob@EXAMPLE.COM", "EXAMPLE.COM");
-        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-        String json = ow.writeValueAsString(identityKerberos).strip();
+        ObjectWriter ow = new ObjectMapper().writer(); // .withDefaultPrettyPrinter();
+        String json = ow.writeValueAsString(identityKerberos);
 
         result.statusCode(200).contentType(ContentType.JSON)
                 .body(Matchers.is(json));
