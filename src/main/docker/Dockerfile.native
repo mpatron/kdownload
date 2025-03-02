@@ -9,7 +9,7 @@ LABEL org.opencontainers.image.licenses="MIT"
 LABEL org.opencontainers.image.documentation="https://github.com/mpatron/kdownload/README.md"
 
 RUN microdnf install --nodocs --assumeyes --best shadow-utils krb5-workstation \
-    bind-utils iputils openldap-clients wget \
+    bind-utils iputils openldap-clients wget vim curl \
     && microdnf clean all
 
 # The UID env var should be used in child Containerfile.
