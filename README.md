@@ -332,7 +332,7 @@ mvn clean test -Dtest=UtilsTest
 ~~~
 
 ~~~bash
-VERSION=1.0.17
+VERSION=1.0.18
 # build
 mvn clean package -DskipTests
 mvn clean && quarkus build --native -Dquarkus.container-image.build=true -Dquarkus.native.container-runtime=podman
@@ -455,7 +455,7 @@ KVNO Timestamp         Principal
    3 01/01/70 00:00:00 HTTP/ubuntu.jobjects.org@JOBJECTS.ORG (aes128-cts-hmac-sha1-96)  (0x33b3009b68f5fee1118f1a211242e528)
 ~~~
 
-
+~~~bash
 podman run --interactive --tty --replace --publish 8089:8089 --name ubuntu ubuntu /bin/bash
 apt update
 apt -yqq install krb5-user libpam-krb5 ldap-utils dnsutils vim libpam-krb5 nginx-full curl
@@ -467,7 +467,7 @@ server {
         listen [::]:8089 default_server;
         root /var/www/html;
         index index.html index.htm index.nginx-debian.html;
-        server_name _;
+        server_name;
         location / {
                 try_files $uri $uri/ =404;
         }
@@ -494,3 +494,4 @@ Default principal: HTTP/ubuntu.jobjects.org@JOBJECTS.ORG
 Valid starting     Expires            Service principal
 02/24/25 22:25:42  02/25/25 08:25:42  krbtgt/JOBJECTS.ORG@JOBJECTS.ORG
         renew until 02/25/25 22:25:42
+~~~
