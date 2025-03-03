@@ -332,7 +332,7 @@ mvn clean test -Dtest=UtilsTest
 ~~~
 
 ~~~bash
-VERSION=1.0.18
+VERSION=1.0.19
 # build
 mvn clean package -DskipTests
 mvn clean && quarkus build --native -Dquarkus.container-image.build=true -Dquarkus.native.container-runtime=podman
@@ -362,7 +362,7 @@ skopeo copy docker-archive:/mnt/c/Temp/kdownload-${VERSION}.tar docker://harbor.
 Run test at home:
 
 ~~~bash
-VERSION=1.0.18
+VERSION=1.0.19
 unset QUARKUS_KERBEROS_KEYTAB_PATH QUARKUS_KERBEROS_SERVICE_PRINCIPAL_NAME QUARKUS_KERBEROS_SERVICE_PRINCIPAL_REALM
 mvn clean && quarkus build --native -Dquarkus.container-image.build=true -Dquarkus.native.container-runtime=podman
 export QUARKUS_KERBEROS_ENABLED=true
