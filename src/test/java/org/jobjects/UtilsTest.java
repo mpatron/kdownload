@@ -1,8 +1,11 @@
 package org.jobjects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 
 import org.junit.jupiter.api.Test;
@@ -51,5 +54,14 @@ public class UtilsTest {
             assertTrue(false);
             e.printStackTrace();
         }
+    }
+
+    @Test()
+    void testIsFileExist() {
+        assertFalse(Utils.isFileExist(null));
+        assertFalse(Utils.isFileExist("does-not-exist.txt"));
+        assertTrue(Utils.isFileExist("/etc/group"));
+        assertTrue(Utils.isFileExist("/etc"));
+        assertTrue(Utils.isFileExist("."));
     }
 }

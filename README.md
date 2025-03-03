@@ -359,6 +359,31 @@ podman save localhost/${USER}/kdownload:${VERSION} -o /mnt/c/Temp/kdownload-${VE
 skopeo copy docker-archive:/mnt/c/Temp/kdownload-${VERSION}.tar docker://harbor.jobjects.org/myproject/kdownload-${VERSION}
 ~~~
 
+Run test at home:
+
+~~~bash
+VERSION=1.0.18
+unset QUARKUS_KERBEROS_KEYTAB_PATH QUARKUS_KERBEROS_SERVICE_PRINCIPAL_NAME QUARKUS_KERBEROS_SERVICE_PRINCIPAL_REALM
+mvn clean && quarkus build --native -Dquarkus.container-image.build=true -Dquarkus.native.container-runtime=podman
+export QUARKUS_KERBEROS_ENABLED=true
+export QUARKUS_KERBEROS_DEBUG=true
+export QUARKUS_KERBEROS_KEYTAB_PATH=/work/keytabs/http.$(hostname -f).keytab
+export QUARKUS_KERBEROS_SERVICE_PRINCIPAL_NAME=HTTP/$(hostname -f)
+export QUARKUS_KERBEROS_SERVICE_PRINCIPAL_REALM=JOBJECTS.ORG
+podman run --rm --detach --replace --cap-add=NET_RAW --name kdownload \
+  --volume ${HOME}/tmp:/work/keytabs \
+  --volume ./podman/krb5.conf:/etc/krb5.conf \
+  --publish 8088:8088 \
+  --env KEYTAB_FILE=${QUARKUS_KERBEROS_KEYTAB_PATH} \
+  --env SERVICE_PRINCIPAL_NAME=${QUARKUS_KERBEROS_SERVICE_PRINCIPAL_NAME} \
+  --env SERVICE_PRINCIPAL_REALM=${QUARKUS_KERBEROS_SERVICE_PRINCIPAL_REALM} \
+  ${USER}/kdownload:${VERSION}
+printf 'HelloWorld!' | kinit alice@JOBJECTS.ORG
+klist
+curl --verbose http://$(hostname -f):8088/q/health
+curl --verbose --negotiate -u : http://$(hostname -f):8088/api/users/me
+~~~
+
 ## Test de santé
 
 ~~~bash

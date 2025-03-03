@@ -2,6 +2,8 @@ package org.jobjects;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.List;
@@ -81,6 +83,18 @@ public class Utils {
       returnValue = maxKeySize > 128;
     } catch (NoSuchAlgorithmException e) {
       Log.info(String.format("JCE uses unlimited policy files %d", maxKeySize), e);
+    }
+    return returnValue;
+  }
+
+  public static boolean isFileExist(String path) {
+    boolean returnValue = Boolean.FALSE;
+    try {
+      if (StringUtils.isNotBlank(path)) {
+        returnValue = Files.exists(Paths.get(path));
+      }
+    } catch (Throwable e) {
+      Log.info(e.getLocalizedMessage(), e);
     }
     return returnValue;
   }
